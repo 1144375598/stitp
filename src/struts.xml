@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
+<struts>
+
+	<constant name="struts.i18n.encoding" value="UTF-8"></constant>
+	
+	<package name="user" namespace="/user" extends="json-default">
+	 	
+	 	<action name="login" class="com.njupt.stitp.server.action.UserAction" method="login"> 			 		
+	 		<result type="json"></result>
+	 	</action>
+	 	
+	 	<action name="register" class="com.njupt.stitp.server.action.UserAction" method="register">
+			<result type="json"></result>	 	
+	 	</action>
+	 	
+	 	<action name="uploadAPP" class="com.njupt.stitp.server.action.UserAction" method="uploadAPP">
+	 		<result type="json"></result>
+	 	</action>
+	 	
+	 	<action name="uploadtrack" class="com.njupt.stitp.server.action.UserAction" method="uploadTrack">
+	 		<result type="json"></result>
+	 	</action>
+	 	</package>
+</struts>    

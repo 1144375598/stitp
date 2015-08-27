@@ -1,0 +1,16 @@
+#MyEclipse Hibernate Properties
+#Tue Aug 25 21:37:40 CST 2015
+genVersionTag=false
+genAnnotations=false
+configFile=/NJUPT_STITP_Server/src/hibernate.cfg.xml
+reStrategyClass=
+sessionFactoryId=
+profile=
+detectM2M=false
+genBasicCompId=false
+keyGenerator=
+createConfigFile=true
+basePersistenceClass=
+detectO2O=false
+useJavaTypes=true
+reSettingsFile=
