@@ -1,7 +1,7 @@
 package com.njupt.stitp.server.model;
 
-import java.sql.Date;
 
+import java.sql.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,8 +13,8 @@ public class APP {
 
 	private int id;
 	private User user;
-	private double APPUseTime;
-	private String aPPName;
+	private int appUseTime;
+	private String appName;
 	private Date addDate;
 	
 	@Id
@@ -33,23 +33,25 @@ public class APP {
 	public void setUser(User user) {
 		this.user = user;
 	}
-	public double getAPPUseTime() {
-		return APPUseTime;
+	
+
+	public String getAppName() {
+		return appName;
 	}
-	public void setAPPUseTime(double aPPUseTime) {
-		APPUseTime = aPPUseTime;
-	}
-	public String getaPPName() {
-		return aPPName;
-	}
-	public void setaPPName(String aPPName) {
-		this.aPPName = aPPName;
+	public void setAppName(String appName) {
+		this.appName = appName;
 	}
 	public Date getAddDate() {
 		return addDate;
 	}
 	public void setAddDate(Date addDate) {
 		this.addDate = addDate;
+	}
+	public int getAppUseTime() {
+		return appUseTime;
+	}
+	public void setAppUseTime(int appUseTime) {
+		this.appUseTime = appUseTime;
 	}
 
 }

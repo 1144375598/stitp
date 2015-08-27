@@ -65,6 +65,7 @@
 		<tx:attributes>
 			<tx:method name="exists" read-only="true" />
 			<tx:method name="add*" propagation="REQUIRED"/>
+			
 		</tx:attributes>
 	</tx:advice>
 </beans>

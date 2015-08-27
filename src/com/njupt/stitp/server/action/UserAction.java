@@ -36,7 +36,6 @@ public class UserAction extends ActionSupport  {
 	public void login() {
 		/*
 		 * result_code:
-		 * -1：登陆失败，未知错误！
 		 * 0: 登陆成功！
 		 * 1：登陆失败，用户名或密码错误！
 		 * 2：登陆失败，用户名不存在！
@@ -52,8 +51,6 @@ public class UserAction extends ActionSupport  {
 			resultMap.put("result_code", 1);
 		} else if(userManager.checkUserPassword(user)){
 			resultMap.put("result_code", 0);
-		} else {
-			resultMap.put("result_code", -1);
 		}
 		try {
 			servletResponse.getWriter().write(new Gson().toJson(resultMap));
@@ -66,8 +63,7 @@ public class UserAction extends ActionSupport  {
 		/*
 		 *   result_code: 
 		 * 0 注册成功
-		 * 1  用户名或邮箱已存在
-		 * 2 数据库操作异常
+		 * 1  用户名已存在
 		 * */
 		Map<String, Object> resultMap=new HashMap<String, Object>();
 		HttpServletResponse servletResponse = ServletActionContext.getResponse();
@@ -76,10 +72,9 @@ public class UserAction extends ActionSupport  {
 		user.setPassword(md5Code.getMD5ofStr(user.getPassword()));
 		if(userManager.exists(user)){
 			resultMap.put("result_code", 1);
-		} else if(userManager.add(user)){
+		} else {
+			userManager.addUser(user);
 			resultMap.put("result_code", 0);
-		} else{
-			resultMap.put("result_code", 3);
 		}
 		
 		try {
@@ -103,11 +98,4 @@ public class UserAction extends ActionSupport  {
 		this.md5Code = md5Code;
 	}
 
-	public void uploadAPP(){
-		
-	}
-	
-	public void uploadTrack(){
-		
-	}
 }

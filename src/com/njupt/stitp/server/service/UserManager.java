@@ -27,9 +27,8 @@ public class UserManager {
 	}
 	
 	
-	public boolean add(User user) {
+	public void addUser(User user) {
 		userDao.save(user);
-		return this.exists(user);
 	}
 	
 	public boolean checkUserPassword(User user){

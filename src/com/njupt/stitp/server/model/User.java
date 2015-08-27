@@ -7,21 +7,25 @@ import javax.persistence.Id;
 @Entity
 public class User {
 
-	private int id;
 	private String username;
 	private String password;
-	private double timeOfContinuousUse;
-	private double timeOfContinuousListen;
+	public int getTimeOfContinuousUse() {
+		return timeOfContinuousUse;
+	}
+	public void setTimeOfContinuousUse(int timeOfContinuousUse) {
+		this.timeOfContinuousUse = timeOfContinuousUse;
+	}
+	public int getTimeOfContinuousListen() {
+		return timeOfContinuousListen;
+	}
+	public void setTimeOfContinuousListen(int timeOfContinuousListen) {
+		this.timeOfContinuousListen = timeOfContinuousListen;
+	}
+	private int timeOfContinuousUse;
+	private int timeOfContinuousListen;
 	private int musicVolume;
 	
 	@Id
-	@GeneratedValue
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
-	}
 	public String getUsername() {
 		return username;
 	}
@@ -34,18 +38,7 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public double getTimeOfContinuousUse() {
-		return timeOfContinuousUse;
-	}
-	public void setTimeOfContinuousUse(double timeOfContinuousUse) {
-		this.timeOfContinuousUse = timeOfContinuousUse;
-	}
-	public double getTimeOfContinuousListen() {
-		return timeOfContinuousListen;
-	}
-	public void setTimeOfContinuousListen(double timeOfContinuousListen) {
-		this.timeOfContinuousListen = timeOfContinuousListen;
-	}
+	
 	public int getMusicVolume() {
 		return musicVolume;
 	}
