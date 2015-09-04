@@ -19,8 +19,16 @@ public class UserAction extends ActionSupport  {
 	private static final long serialVersionUID = 1L;
 
 	private User user;
+	private String friendName;
 	private UserManager userManager=new UserManager();
 	private MD5Code md5Code=new MD5Code();
+	public String getFriendName() {
+		return friendName;
+	}
+
+	public void setFriendName(String friendName) {
+		this.friendName = friendName;
+	}
 	public UserManager getUserManager() {
 		return userManager;
 	}
@@ -32,7 +40,22 @@ public class UserAction extends ActionSupport  {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+	
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
+	}
 
+	public MD5Code getMd5Code() {
+		return md5Code;
+	}
+
+	public void setMd5Code(MD5Code md5Code) {
+		this.md5Code = md5Code;
+	}
+	
 	public void login() {
 		/*
 		 * result_code:
@@ -83,19 +106,30 @@ public class UserAction extends ActionSupport  {
 			e.printStackTrace();
 		}	
 	}
-	public User getUser() {
-		return user;
-	}
-	public void setUser(User user) {
-		this.user = user;
+	public void deleteFriend(){
+		/*
+		 *   result_code: 
+		 * 0 删除成功
+		 * 1  不可删除家长
+		 * */
+		Map<String, Object> resultMap=new HashMap<String, Object>();
+		HttpServletResponse servletResponse = ServletActionContext.getResponse();
+		servletResponse.setContentType("text/html;charset=utf-8");
+		servletResponse.setCharacterEncoding("UTF-8");
+		if(userManager.deleteFriend(user,friendName)){
+			resultMap.put("result_code", 0);
+		} else{
+			resultMap.put("result_code", 1);
+		}
+		
+		try {
+			servletResponse.getWriter().write(new Gson().toJson(resultMap));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}	
 	}
 
-	public MD5Code getMd5Code() {
-		return md5Code;
-	}
-
-	public void setMd5Code(MD5Code md5Code) {
-		this.md5Code = md5Code;
-	}
+	
+	
 
 }

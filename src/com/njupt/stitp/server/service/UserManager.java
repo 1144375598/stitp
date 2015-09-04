@@ -34,4 +34,7 @@ public class UserManager {
 	public boolean checkUserPassword(User user){
 		return userDao.checkUserPassword(user);
 	}
+	public boolean deleteFriend(User user,String friendName){
+		return userDao.deleteFriend(user,friendName);
+	}
 }

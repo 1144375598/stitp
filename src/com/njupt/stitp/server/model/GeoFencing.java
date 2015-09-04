@@ -1,30 +1,17 @@
 package com.njupt.stitp.server.model;
 
-
-import java.util.Date;
-
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 @Entity
-public class Track {
+public class GeoFencing {
 	private int id;
 	private User user;
-	private Date addTime;
-	private double longitude;
+	private double longtitude;
 	private double latitude;
-
-	public Date getAddTime() {
-		return addTime;
-	}
-
-	public void setAddTime(Date addTime) {
-		this.addTime = addTime;
-	}
-
+	private double distance;
 	@Id
 	@GeneratedValue
 	public int getId() {
@@ -34,8 +21,7 @@ public class Track {
 	public void setId(int id) {
 		this.id = id;
 	}
-
-	@ManyToOne(fetch = FetchType.LAZY)
+	@OneToOne
 	public User getUser() {
 		return user;
 	}
@@ -44,12 +30,12 @@ public class Track {
 		this.user = user;
 	}
 
-	public double getLongitude() {
-		return longitude;
+	public double getLongtitude() {
+		return longtitude;
 	}
 
-	public void setLongitude(double longitude) {
-		this.longitude = longitude;
+	public void setLongtitude(double longtitude) {
+		this.longtitude = longtitude;
 	}
 
 	public double getLatitude() {
@@ -58,6 +44,14 @@ public class Track {
 
 	public void setLatitude(double latitude) {
 		this.latitude = latitude;
+	}
+
+	public double getDistance() {
+		return distance;
+	}
+
+	public void setDistance(double distance) {
+		this.distance = distance;
 	}
 
 }

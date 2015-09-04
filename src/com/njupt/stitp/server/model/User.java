@@ -1,14 +1,33 @@
 package com.njupt.stitp.server.model;
 
+import java.util.Set;
+
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 
 @Entity
 public class User {
 
 	private String username;
 	private String password;
+	private int timeOfContinuousUse;
+	private int timeOfContinuousListen;
+	private int musicVolume;
+	private Set<User> children;
+	@ManyToMany
+	@JoinTable(name="relationship",
+    	joinColumns = @JoinColumn(name="parent_id"),
+    	inverseJoinColumns = @JoinColumn(name="child_id")
+	)
+	public Set<User> getChildren() {
+		return children;
+	}
+	public void setChildren(Set<User> children) {
+		this.children = children;
+	}
 	public int getTimeOfContinuousUse() {
 		return timeOfContinuousUse;
 	}
@@ -21,9 +40,7 @@ public class User {
 	public void setTimeOfContinuousListen(int timeOfContinuousListen) {
 		this.timeOfContinuousListen = timeOfContinuousListen;
 	}
-	private int timeOfContinuousUse;
-	private int timeOfContinuousListen;
-	private int musicVolume;
+	
 	
 	@Id
 	public String getUsername() {

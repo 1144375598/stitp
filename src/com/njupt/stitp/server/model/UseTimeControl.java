@@ -1,9 +1,7 @@
 package com.njupt.stitp.server.model;
 
-import java.sql.Date;
-
-
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -12,8 +10,8 @@ import javax.persistence.ManyToOne;
 public class UseTimeControl {
 	private int id;
 	private User user;
-	private Date start;
-	private Date end;
+	private double start;
+	private double end;
 	
 	@Id
 	@GeneratedValue
@@ -24,7 +22,7 @@ public class UseTimeControl {
 	public void setId(int id) {
 		this.id = id;
 	}
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	public User getUser() {
 		return user;
 	}
@@ -32,16 +30,20 @@ public class UseTimeControl {
 	public void setUser(User user) {
 		this.user = user;
 	}
-	public Date getStart() {
+
+	public double getStart() {
 		return start;
 	}
-	public void setStart(Date start) {
+
+	public void setStart(double start) {
 		this.start = start;
 	}
-	public Date getEnd() {
+
+	public double getEnd() {
 		return end;
 	}
-	public void setEnd(Date end) {
+
+	public void setEnd(double end) {
 		this.end = end;
 	}
 	

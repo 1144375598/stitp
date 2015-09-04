@@ -3,7 +3,6 @@
 <struts>
 
 	<constant name="struts.i18n.encoding" value="UTF-8"></constant>
-
 	<package name="user" namespace="/user" extends="json-default">
 		<action name="login" class="com.njupt.stitp.server.action.UserAction"
 			method="login">
@@ -12,6 +11,10 @@
 
 		<action name="register" class="com.njupt.stitp.server.action.UserAction"
 			method="register">
+			<result type="json"></result>
+		</action>
+		<action name="deleteFriend" class="com.njupt.stitp.server.action.UserAction"
+			method="deleteFriend">
 			<result type="json"></result>
 		</action>
 	</package>
@@ -26,15 +29,29 @@
 			method="uploadTrackInfo">
 			<result type="json"></result>
 		</action>
+		<action name="useTimeControlInfo" class="com.njupt.stitp.server.action.UploadInfoAction"
+			method="uploadUseTimeControlInfo">
+			<result type="json"></result>
+		</action>
+		<action name="GeoFencingInfo" class="com.njupt.stitp.server.action.UploadInfoAction"
+			method="uploadGenFencingInfo">
+			<result type="json"></result>
+		</action>
 	</package>
+	
 	<package name="downloadInfo" namespace="/downloadInfo" extends="json-default">
 		<action name="appInfo" class="com.njupt.stitp.server.action.DownloadInfoAction"
-			method="DownloadAPPInfo">
+			method="downloadAPPInfo">
 			<result type="json"></result>
 		</action>
 
 		<action name="trackInfo" class="com.njupt.stitp.server.action.DownloadInfoAction"
-			method="DownloadTrackInfo">
+			method="downloadTrackInfo">
+			<result type="json"></result>
+		</action>
+		
+		<action name="useTimeControlInfo" class="com.njupt.stitp.server.action.DownloadInfoAction"
+			method="downloadUseTimeControlInfo">
 			<result type="json"></result>
 		</action>
 	</package>
