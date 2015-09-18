@@ -1,6 +1,7 @@
 package com.njupt.stitp.server.action;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,6 +12,7 @@ import org.apache.struts2.ServletActionContext;
 import com.google.gson.Gson;
 import com.njupt.stitp.server.model.User;
 import com.njupt.stitp.server.service.UserManager;
+import com.njupt.stitp.sever.util.GeTui;
 import com.njupt.stitp.sever.util.MD5Code;
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -20,8 +22,29 @@ public class UserAction extends ActionSupport  {
 
 	private User user;
 	private String friendName;
-	private UserManager userManager=new UserManager();
-	private MD5Code md5Code=new MD5Code();
+	private UserManager userManager= new UserManager();
+	private MD5Code md5Code = new MD5Code();
+	private String message;
+	private String relationship;
+	private Integer resultCode;
+	
+
+	public String getRelationship() {
+		return relationship;
+	}
+
+	public void setRelationship(String relationship) {
+		this.relationship = relationship;
+	}
+	
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
 	public String getFriendName() {
 		return friendName;
 	}
@@ -106,7 +129,7 @@ public class UserAction extends ActionSupport  {
 			e.printStackTrace();
 		}	
 	}
-	public void deleteFriend(){
+	public void deleteChild(){
 		/*
 		 *   result_code: 
 		 * 0 删除成功
@@ -116,7 +139,7 @@ public class UserAction extends ActionSupport  {
 		HttpServletResponse servletResponse = ServletActionContext.getResponse();
 		servletResponse.setContentType("text/html;charset=utf-8");
 		servletResponse.setCharacterEncoding("UTF-8");
-		if(userManager.deleteFriend(user,friendName)){
+		if(userManager.deleteChild(user,friendName)){
 			resultMap.put("result_code", 0);
 		} else{
 			resultMap.put("result_code", 1);
@@ -128,8 +151,83 @@ public class UserAction extends ActionSupport  {
 			e.printStackTrace();
 		}	
 	}
-
+	public void uidAndCid(){
+		userManager.updateCid(user);
+	}
+	public void addFriend(){
+		/*
+		 * result_code
+		 * 0 验证消息发送成功
+		 * 1 消息发送失败
+		 */
+		Map<String, Object> resultMap=new HashMap<String, Object>();
+		HttpServletResponse servletResponse = ServletActionContext.getResponse();
+		servletResponse.setContentType("text/html;charset=utf-8");
+		servletResponse.setCharacterEncoding("UTF-8");
+		
+		
+		String mes = "username =" + user.getUsername() + "," + "message =" + message + "," +"relationship =" + relationship;
+		String result = GeTui.pushMessage(userManager.getCidByUsername(friendName), mes);
+		
+		if(result.equals("successed_online")||result.equals("successed_offline")){
+			resultMap.put("result_code", 0);
+		} else{
+			resultMap.put("result_code", 1);
+		}
+		
+		try {
+			servletResponse.getWriter().write(new Gson().toJson(resultMap));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}	
+	}
 	
-	
+	public void addFriendResult(){
+		String result = "friendName =" + friendName + "," +"relationship =" + relationship + "," +"addFriendResult =";
+		if(resultCode==1)
+			GeTui.pushMessage(userManager.getCidByUsername(user.getUsername()), result+"1");
+		else if(resultCode == 0){
+			if(relationship.equals("child"))
+				userManager.addChild(user.getUsername(), friendName);
+			else if (relationship.equals("parents")){
+				userManager.addChild(friendName,user.getUsername());
+			}	
+			GeTui.pushMessage(userManager.getCidByUsername(user.getUsername()), result+"0");
+		}
+	}
 
+	public Integer getResultCode() {
+		return resultCode;
+	}
+
+	public void setResultCode(Integer resultCode) {
+		this.resultCode = resultCode;
+	}
+	
+	public void sendMessage(){
+		/*
+		 * result_code
+		 * 0 消息发送成功
+		 * 1 消息发送失败
+		 */
+		Map<String, Object> resultMap=new HashMap<String, Object>();
+		HttpServletResponse servletResponse = ServletActionContext.getResponse();
+		servletResponse.setContentType("text/html;charset=utf-8");
+		servletResponse.setCharacterEncoding("UTF-8");
+		
+		String mes = "username =" + user.getUsername() + "," + "message =" + message +"," + "date =" + new Date().toString();
+		String result = GeTui.pushMessage(userManager.getCidByUsername(friendName), mes);
+		
+		if(result.equals("successed_online")||result.equals("successed_offline")){
+			resultMap.put("result_code", 0);
+		} else{
+			resultMap.put("result_code", 1);
+		}
+		
+		try {
+			servletResponse.getWriter().write(new Gson().toJson(resultMap));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }

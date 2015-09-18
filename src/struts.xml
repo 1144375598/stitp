@@ -13,8 +13,24 @@
 			method="register">
 			<result type="json"></result>
 		</action>
-		<action name="deleteFriend" class="com.njupt.stitp.server.action.UserAction"
-			method="deleteFriend">
+		<action name="deleteChild" class="com.njupt.stitp.server.action.UserAction"
+			method="deleteChild">
+			<result type="json"></result>
+		</action>
+		<action name="uidAndCid" class="com.njupt.stitp.server.action.UserAction"
+			method="uidAndCid">
+			<result type="json"></result>
+		</action>
+		<action name="addFriend" class="com.njupt.stitp.server.action.UserAction"
+			method="addFriend">
+			<result type="json"></result>
+		</action>
+		<action name="addFriendResult" class="com.njupt.stitp.server.action.UserAction"
+			method="addFriendResult">
+			<result type="json"></result>
+		</action>
+		<action name="sendMessage" class="com.njupt.stitp.server.action.UserAction"
+			method="sendMessage">
 			<result type="json"></result>
 		</action>
 	</package>
@@ -52,6 +68,10 @@
 		
 		<action name="useTimeControlInfo" class="com.njupt.stitp.server.action.DownloadInfoAction"
 			method="downloadUseTimeControlInfo">
+			<result type="json"></result>
+		</action>
+		<action name="geoFencingInfo" class="com.njupt.stitp.server.action.DownloadInfoAction"
+			method="downloadGeoFencingInfo">
 			<result type="json"></result>
 		</action>
 	</package>

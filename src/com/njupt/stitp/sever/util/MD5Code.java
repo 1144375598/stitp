@@ -1,6 +1,8 @@
 package com.njupt.stitp.sever.util;
 
+import org.springframework.stereotype.Component;
 
+@Component
 public class MD5Code {
 	/*
 	 * 下面这些S11-S44实际上是一个4*4的矩阵，在原始的C实现中是用#define 实现的， 这里把它们实现成为static

@@ -14,6 +14,7 @@ import org.apache.struts2.ServletActionContext;
 
 import com.google.gson.Gson;
 import com.njupt.stitp.server.dto.APPDto;
+import com.njupt.stitp.server.dto.GeoFencingDto;
 import com.njupt.stitp.server.dto.TrackDto;
 import com.njupt.stitp.server.dto.UseTimeControlDto;
 import com.njupt.stitp.server.model.User;
@@ -61,13 +62,13 @@ public class DownloadInfoAction {
 		HttpServletResponse servletResponse = ServletActionContext.getResponse();
 		servletResponse.setContentType("text/html;charset=utf-8");
 		servletResponse.setCharacterEncoding("UTF-8");
-		Map<Integer, Object> resultMap=new HashMap<Integer, Object>();
+		Map<String, Object> resultMap=new HashMap<String, Object>();
 		SimpleDateFormat sdf =   new SimpleDateFormat( "yyyy-MM-dd" );
 		Date date=null;
 		try {
 			date = sdf.parse(dateString);
 		} catch (ParseException e1) {
-			resultMap.put(1, "wrong parameters");
+			resultMap.put("result_code", 1);
 			try {
 				servletResponse.getWriter().write(new Gson().toJson(resultMap));
 			} catch (IOException e) {
@@ -78,9 +79,10 @@ public class DownloadInfoAction {
 		}	
 		List<APPDto> apps = infoManager.getAPPInfo(user,date);
 		if(apps.size()==0){
-			resultMap.put(2, "no result");
+			resultMap.put("result_code",2);
 		} else{
-			resultMap.put(0, apps);	
+			resultMap.put("result_code",0);
+			resultMap.put("result", apps);	
 		}			
 		try {
 			servletResponse.getWriter().write(new Gson().toJson(resultMap));
@@ -99,13 +101,13 @@ public class DownloadInfoAction {
 		HttpServletResponse servletResponse = ServletActionContext.getResponse();
 		servletResponse.setContentType("text/html;charset=utf-8");
 		servletResponse.setCharacterEncoding("UTF-8");
-		Map<Integer, Object> resultMap=new HashMap<Integer, Object>();
+		Map<String, Object> resultMap=new HashMap<String, Object>();
 		SimpleDateFormat sdf =   new SimpleDateFormat( "yyyy-MM-dd" );
 		Date date=null;
 		try {
 			date = sdf.parse(dateString);
 		} catch (ParseException e1) {
-			resultMap.put(1, "wrong parameters");
+			resultMap.put("result_code", 1);
 			try {
 				servletResponse.getWriter().write(new Gson().toJson(resultMap));
 			} catch (IOException e) {
@@ -116,9 +118,10 @@ public class DownloadInfoAction {
 		}	
 		List<TrackDto> tracks = infoManager.getTrackInfo(user,date);
 		if(tracks.size()==0){
-			resultMap.put(2, "no result");
+			resultMap.put("result_code",2);
 		} else{
-			resultMap.put(0, tracks);	
+			resultMap.put("result_code",0);
+			resultMap.put("result", tracks);	
 		}			
 		try {
 			servletResponse.getWriter().write(new Gson().toJson(resultMap));
@@ -136,17 +139,41 @@ public class DownloadInfoAction {
 		HttpServletResponse servletResponse = ServletActionContext.getResponse();
 		servletResponse.setContentType("text/html;charset=utf-8");
 		servletResponse.setCharacterEncoding("UTF-8");
-		Map<Integer, Object> resultMap=new HashMap<Integer, Object>();
+		Map<String, Object> resultMap=new HashMap<String, Object>();
 		List<UseTimeControlDto> useTimeControlDtos = infoManager.getUseTimeControlInfo(user);
 		if(useTimeControlDtos.size()==0){
-			resultMap.put(1, "no result");
+			resultMap.put("result_code", "no result");
 		} else{
-			resultMap.put(0, useTimeControlDtos);	
+			resultMap.put("result_code", 0);
+			resultMap.put("result", useTimeControlDtos);
 		}			
 		try {
 			servletResponse.getWriter().write(new Gson().toJson(resultMap));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}		
+	}
+	public void downloadGeoFencingInfo(){
+		/*
+		 * result_code
+		 * 0 查询成功
+		 * 1 无地理围栏信息
+		 */
+		HttpServletResponse servletResponse = ServletActionContext.getResponse();
+		servletResponse.setContentType("text/html;charset=utf-8");
+		servletResponse.setCharacterEncoding("UTF-8");
+		Map<String, Object> resultMap=new HashMap<String, Object>();
+		GeoFencingDto geoFencingDto = infoManager.getGeoFencingInfo(user);
+		if(geoFencingDto.getUsername().equals("")){
+			resultMap.put("result_code", "no result");
+		} else{
+			resultMap.put("result_code", 0);
+			resultMap.put("result", geoFencingDto);	
+		}
+		try {
+			servletResponse.getWriter().write(new Gson().toJson(resultMap));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}	
 	}
 }

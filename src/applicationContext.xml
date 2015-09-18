@@ -35,7 +35,7 @@
 				</prop>
 				<prop key="hibernate.show_sql">true</prop>
 				<!-- <prop key="hibernate.connection.pool_size">100</prop> -->
-				<!-- <prop key="hibernate.hbm2ddl.auto">create</prop> -->
+				<prop key="hibernate.hbm2ddl.auto">create</prop>
 				<prop key="hibernate.format_sql">true</prop>
 				<!-- <prop key="hibernate.current_session_context_class">thread</prop> -->
 			</props>
@@ -66,6 +66,9 @@
 			<tx:method name="exists" read-only="true" />
 			<tx:method name="add*" propagation="REQUIRED"/>
 			<tx:method name="get*" read-only="true"/>
+			<tx:method name="check*" read-only="true"/>
+			<tx:method name="update*" propagation="REQUIRED"/>
+			<tx:method name="delete*" propagation="REQUIRED"/>
 		</tx:attributes>
 	</tx:advice>
 </beans>

@@ -11,10 +11,12 @@ import javax.annotation.Resource;
 
 
 
+
 import org.springframework.stereotype.Component;
 
 import com.njupt.stitp.server.dao.InfoDao;
 import com.njupt.stitp.server.dto.APPDto;
+import com.njupt.stitp.server.dto.GeoFencingDto;
 import com.njupt.stitp.server.dto.TrackDto;
 import com.njupt.stitp.server.dto.UseTimeControlDto;
 import com.njupt.stitp.server.model.APP;
@@ -84,5 +86,19 @@ public class InfoManager {
 	}
 	public void addGenFencingInfo(GeoFencing geoFencing){
 		infoDao.saveGeoFencingInfo(geoFencing);
+	}
+	public GeoFencingDto getGeoFencingInfo(User user){
+		GeoFencingDto geoFencingDto=new GeoFencingDto();
+		List<GeoFencing> geoFencing = infoDao.getGeoFencingInfo(user);
+		if(geoFencing.size()==0){
+			geoFencingDto.setUsername("");;
+			return geoFencingDto;
+		} else{
+			geoFencingDto.setDistance(geoFencing.get(0).getDistance());
+			geoFencingDto.setLatitude(geoFencing.get(0).getLatitude());
+			geoFencingDto.setLongtitude(geoFencing.get(0).getLongtitude());
+			geoFencingDto.setUsername(user.getUsername());
+			return geoFencingDto;
+		}
 	}
 }

@@ -26,7 +26,9 @@ public class UserManager {
 		return false;
 	}
 	
-	
+	public void updateCid(User user){
+		userDao.updateCid(user);
+	}
 	public void addUser(User user) {
 		userDao.save(user);
 	}
@@ -34,7 +36,13 @@ public class UserManager {
 	public boolean checkUserPassword(User user){
 		return userDao.checkUserPassword(user);
 	}
-	public boolean deleteFriend(User user,String friendName){
-		return userDao.deleteFriend(user,friendName);
+	public boolean deleteChild(User user,String childName){
+		return userDao.deleteChild(user,childName);
+	}
+	public void addChild(String username,String childName){
+		userDao.addChild(username,childName);
+	}
+	public String getCidByUsername(String username){
+		return userDao.getCidByUsername(username);
 	}
 }

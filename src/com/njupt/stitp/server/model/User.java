@@ -16,7 +16,16 @@ public class User {
 	private int timeOfContinuousUse;
 	private int timeOfContinuousListen;
 	private int musicVolume;
+	private String cid;
 	private Set<User> children;
+	
+	public String getCid() {
+		return cid;
+	}
+	public void setCid(String cid) {
+		this.cid = cid;
+	}
+	
 	@ManyToMany
 	@JoinTable(name="relationship",
     	joinColumns = @JoinColumn(name="parent_id"),

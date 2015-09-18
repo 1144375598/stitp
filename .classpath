@@ -11,7 +11,6 @@
 			<attribute name="owner.project.facets" value="jst.web"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="con" path="com.genuitec.runtime.library/com.genuitec.jstl_1.2.1">
 		<attributes>
@@ -19,13 +18,13 @@
 			<attribute name="owner.project.facets" value="jst.web.jstl"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="libs/commons-codec-1.2.jar"/>
-	<classpathentry kind="lib" path="libs/commons-configuration-1.6.jar"/>
-	<classpathentry kind="lib" path="libs/commons-logging-1.0.3.jar"/>
-	<classpathentry kind="lib" path="libs/gexin-rp-sdk-base-4.0.0.2.jar"/>
-	<classpathentry kind="lib" path="libs/gexin-rp-sdk-http-4.0.0.2.jar"/>
-	<classpathentry kind="lib" path="libs/gexin-rp-sdk-template-4.0.0.2.jar"/>
-	<classpathentry kind="lib" path="libs/jackson-all-1.8.5.jar"/>
-	<classpathentry kind="lib" path="libs/protobuf-java-2.5.0.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons-codec-1.2.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons-configuration-1.6.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/gexin-rp-sdk-base-4.0.0.2.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/gexin-rp-sdk-http-4.0.0.2.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/gexin-rp-sdk-template-4.0.0.2.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jackson-all-1.8.5.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/protobuf-java-2.5.0.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>

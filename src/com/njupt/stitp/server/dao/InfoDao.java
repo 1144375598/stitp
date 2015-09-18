@@ -83,6 +83,24 @@ public class InfoDao {
 		return useTimeControls;
 	}
 	public void saveGeoFencingInfo(GeoFencing geoFencing){
-		sf.getCurrentSession().save(geoFencing);
+		Session session=sf.getCurrentSession();	
+		Query query=session.createQuery("from GeoFencing g where g.user.username = :username")
+				.setString("username", geoFencing.getUser().getUsername());
+		List<GeoFencing> geoFencings =query.list();
+		if(geoFencings.size()==0){
+			session.save(geoFencing);
+		} else{
+			geoFencings.get(0).setDistance(geoFencing.getDistance());
+			geoFencings.get(0).setLatitude(geoFencing.getLatitude());
+			geoFencings.get(0).setLongtitude(geoFencing.getLongtitude());
+			session.update(geoFencings.get(0));
+		}
+	}
+	public List<GeoFencing> getGeoFencingInfo(User user){
+		Session session =sf.getCurrentSession();
+		Query query=session.createQuery("from GeoFencing g where g.user.username = :username")
+				.setString("username", user.getUsername());
+		List<GeoFencing> geoFencings =(List<GeoFencing>)query.list();
+		return geoFencings;
 	}
 }

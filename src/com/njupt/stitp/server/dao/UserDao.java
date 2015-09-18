@@ -1,18 +1,11 @@
 package com.njupt.stitp.server.dao;
 
-import java.util.List;
-
 import javax.annotation.Resource;
 
-
-
-
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Component;
 
-import com.njupt.stitp.server.model.UseTimeControl;
 import com.njupt.stitp.server.model.User;
 
 @Component("userDao")
@@ -35,7 +28,7 @@ public class UserDao {
 
 	public boolean checkUserPassword(User user){
 		Session s=sf.getCurrentSession();
-		long count=(Long)s.createQuery("select count(*) From User u where u.name =:username and u.password=:password")
+		long count=(Long)s.createQuery("select count(*) From User u where u.username =:username and u.password=:password")
 				.setString("username", user.getUsername())
 				.setString("password", user.getPassword())
 				.uniqueResult();
@@ -54,17 +47,44 @@ public class UserDao {
 		return false;	
 	}
 	
-	public boolean deleteFriend(User user,String friendName){
+	public boolean deleteChild(User user,String childName){
 		Session s=sf.getCurrentSession();
 		User u = (User) s.createQuery("from User u where u.username=:username")
 				.setString("username", user.getUsername())
 				.uniqueResult();
 		for(User child : u.getChildren()){
-			if(child.getUsername()==friendName)
+			if(child.getUsername().equals(childName))
 				u.getChildren().remove(child);
 			s.update(u);
 			return true;
 		}
 		return false;
+	}
+	public void updateCid(User user){
+		Session s=sf.getCurrentSession();
+		User u = (User) s.createQuery("from User u where u.username=:username")
+				.setString("username", user.getUsername())
+				.uniqueResult();
+		u.setCid(user.getCid());
+		s.update(u);
+	}
+	public String getCidByUsername(String username){
+		Session s=sf.getCurrentSession();
+		User u = (User) s.createQuery("from User u where u.username=:username")
+				.setString("username", username)
+				.uniqueResult();
+		return u.getCid();
+	}
+	
+	public void addChild(String username,String childName){
+		Session s=sf.getCurrentSession();
+		User u = (User) s.createQuery("from User u where u.username=:username")
+				.setString("username", username)
+				.uniqueResult();
+		User child = (User)s.createQuery("from User u where u.username=:username")
+				.setString("username", childName)
+				.uniqueResult();
+		u.getChildren().add(child);
+		s.update(u);
 	}
 }
