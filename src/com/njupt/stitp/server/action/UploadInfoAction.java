@@ -1,14 +1,16 @@
 package com.njupt.stitp.server.action;
 
 
-
-import java.util.Date;
+import java.util.List;
 
 import com.njupt.stitp.server.model.APP;
 import com.njupt.stitp.server.model.GeoFencing;
 import com.njupt.stitp.server.model.Track;
 import com.njupt.stitp.server.model.UseTimeControl;
+import com.njupt.stitp.server.model.User;
 import com.njupt.stitp.server.service.InfoManager;
+import com.njupt.stitp.server.service.UserManager;
+import com.njupt.stitp.sever.util.GeTui;
 
 public class UploadInfoAction {
 	private APP app;
@@ -16,7 +18,14 @@ public class UploadInfoAction {
 	private UseTimeControl useTimeControl;
 	private GeoFencing geoFencing;
 	private InfoManager infoManager=new InfoManager();
+	private UserManager userManager = new UserManager();
 	
+	public UserManager getUserManager() {
+		return userManager;
+	}
+	public void setUserManager(UserManager userManager) {
+		this.userManager = userManager;
+	}
 	public UseTimeControl getUseTimeControl() {
 		return useTimeControl;
 	}
@@ -48,7 +57,14 @@ public class UploadInfoAction {
 		infoManager.addAPPInfo(app);
 	}
 	public void uploadTrackInfo(){
-		track.setAddTime(new Date());
+		String mes;
+		if(infoManager.outOfRange(track)){
+			List<User> users= userManager.getParents(track.getUser());
+			for(User user : users){
+				mes =user.getUsername()+", out of range" ;
+				GeTui.pushMessage(userManager.getCidByUsername(user.getUsername()),mes);
+			}
+		}
 		infoManager.addTrackInfo(track);
 	}
 	public void uploadUseTimeControlInfo(){

@@ -86,6 +86,7 @@ public class UserAction extends ActionSupport  {
 		 * 1：登陆失败，用户名或密码错误！
 		 * 2：登陆失败，用户名不存在！
 		 * */
+		System.out.println("*************************"+user.getUsername());
 		Map<String, Object> resultMap=new HashMap<String, Object>();
 		HttpServletResponse servletResponse = ServletActionContext.getResponse();
 		servletResponse.setContentType("text/html;charset=utf-8");
@@ -229,5 +230,13 @@ public class UserAction extends ActionSupport  {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void resetPassword(){
+		user.setPassword(md5Code.getMD5ofStr(user.getPassword()));
+		userManager.updatePassword(user);
+	}
+	public void continueUseTime(){
+		userManager.updateContinueTime(user);
 	}
 }

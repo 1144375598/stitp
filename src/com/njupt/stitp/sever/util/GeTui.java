@@ -1,7 +1,5 @@
 package com.njupt.stitp.sever.util;
 
-import org.springframework.stereotype.Component;
-
 import com.gexin.rp.sdk.base.IPushResult;
 import com.gexin.rp.sdk.base.impl.SingleMessage;
 import com.gexin.rp.sdk.base.impl.Target;

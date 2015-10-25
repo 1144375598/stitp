@@ -69,6 +69,7 @@
 			<tx:method name="check*" read-only="true"/>
 			<tx:method name="update*" propagation="REQUIRED"/>
 			<tx:method name="delete*" propagation="REQUIRED"/>
+			<tx:method name="out*" propagation="REQUIRED"/>
 		</tx:attributes>
 	</tx:advice>
 </beans>

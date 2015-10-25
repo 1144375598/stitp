@@ -1,29 +1,28 @@
 package com.njupt.stitp.server.service;
 
 import java.util.Date;
+
 import java.util.List;
 import java.util.Vector;
 
 import javax.annotation.Resource;
 
-
-
-
-
-
-
 import org.springframework.stereotype.Component;
 
 import com.njupt.stitp.server.dao.InfoDao;
 import com.njupt.stitp.server.dto.APPDto;
+import com.njupt.stitp.server.dto.ContinueUseTimeDto;
 import com.njupt.stitp.server.dto.GeoFencingDto;
 import com.njupt.stitp.server.dto.TrackDto;
 import com.njupt.stitp.server.dto.UseTimeControlDto;
+import com.njupt.stitp.server.dto.ValidationQuestionDto;
 import com.njupt.stitp.server.model.APP;
 import com.njupt.stitp.server.model.GeoFencing;
 import com.njupt.stitp.server.model.Track;
 import com.njupt.stitp.server.model.UseTimeControl;
 import com.njupt.stitp.server.model.User;
+import com.njupt.stitp.server.model.ValidationQuestion;
+import com.njupt.stitp.sever.util.CalDistance;
 
 @Component
 public class InfoManager {
@@ -100,5 +99,43 @@ public class InfoManager {
 			geoFencingDto.setUsername(user.getUsername());
 			return geoFencingDto;
 		}
+	}
+	public List<ValidationQuestionDto> getQuestionInfo(User user){
+		List<ValidationQuestion> vqs= infoDao.getVqInfo(user);
+		List<ValidationQuestionDto> vqds=new Vector<ValidationQuestionDto>();
+		for(ValidationQuestion vq :vqs){
+			ValidationQuestionDto vqd = new ValidationQuestionDto();
+			vqd.setAnswer(vq.getAnswer());
+			vqd.setQuestion(vq.getQuestion());
+			vqd.setUsername(vq.getUser().getUsername());
+			vqds.add(vqd);
+		}
+		return vqds;
+	}
+	public boolean outOfRange(Track track){
+		double distance;
+		List<GeoFencing> gfs = infoDao.getGeoFencingInfo(track.getUser());
+		for(GeoFencing gf : gfs){
+			distance = CalDistance.calDistance(track.getLatitude(),track.getLongitude(),gf.getLatitude(),gf.getLongtitude());
+			if(distance > gf.getDistance()){
+				//getFlag为true表示超出范围的信息在之前已经发送给家长
+				if(infoDao.getFlag(track.getUser()))
+					return false;
+				else {
+					infoDao.setFlag(track.getUser(), true);
+					return true;
+				}					
+			}		
+		}
+		infoDao.setFlag(track.getUser(), false);
+		return false;
+	}
+	
+	public ContinueUseTimeDto getContinueUseTime(User user){
+		User u = infoDao.getContinueUseTime(user);
+		ContinueUseTimeDto cutd = new ContinueUseTimeDto();
+		cutd.setContinueUseTime(u.getTimeOfContinuousUse());
+		cutd.setUsername(u.getUsername());
+		return cutd;
 	}
 }

@@ -1,5 +1,7 @@
 package com.njupt.stitp.server.service;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Component;
@@ -44,5 +46,14 @@ public class UserManager {
 	}
 	public String getCidByUsername(String username){
 		return userDao.getCidByUsername(username);
+	}
+	public void updatePassword(User user){
+		userDao.updatePassword(user);
+	}
+	public List<User> getParents(User user){
+		return userDao.getParents(user);
+	}
+	public void updateContinueTime(User user){
+		userDao.updateContinueTime(user);
 	}
 }

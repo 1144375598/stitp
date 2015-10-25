@@ -1,7 +1,10 @@
 package com.njupt.stitp.server.dao;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Component;
@@ -85,6 +88,31 @@ public class UserDao {
 				.setString("username", childName)
 				.uniqueResult();
 		u.getChildren().add(child);
+		s.update(u);
+	}
+	public void updatePassword(User user){
+		Session s=sf.getCurrentSession();
+		User u = (User) s.createQuery("from User u where u.username=:username")
+				.setString("username", user.getUsername())
+				.uniqueResult();
+		u.setPassword(user.getPassword());
+		s.update(u);
+	}
+	public List<User> getParents(User user){
+		Session s=sf.getCurrentSession();
+		SQLQuery query = ((SQLQuery) s.createSQLQuery("select * from user where username in (select parent_id from relationship where child_id = :username) ")
+				.setString("username", user.getUsername()))
+				.addEntity(User.class);
+		List<User> users = query.list();
+		/*System.out.println("****************************"+users);*/
+		return users;
+	}
+	public void updateContinueTime(User user){
+		Session s=sf.getCurrentSession();
+		User u = (User) s.createQuery("from User u where u.username=:username")
+				.setString("username", user.getUsername())
+				.uniqueResult();
+		u.setTimeOfContinuousUse(user.getTimeOfContinuousUse());
 		s.update(u);
 	}
 }

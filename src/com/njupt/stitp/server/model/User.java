@@ -17,7 +17,16 @@ public class User {
 	private int timeOfContinuousListen;
 	private int musicVolume;
 	private String cid;
+	private boolean flag;
 	private Set<User> children;
+	
+	public boolean isFlag() {
+		return flag;
+	}
+	public void setFlag(boolean flag) {
+		this.flag = flag;
+	}
+	
 	
 	public String getCid() {
 		return cid;

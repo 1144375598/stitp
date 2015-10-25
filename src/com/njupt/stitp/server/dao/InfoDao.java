@@ -15,6 +15,7 @@ import com.njupt.stitp.server.model.GeoFencing;
 import com.njupt.stitp.server.model.Track;
 import com.njupt.stitp.server.model.UseTimeControl;
 import com.njupt.stitp.server.model.User;
+import com.njupt.stitp.server.model.ValidationQuestion;
 @Component
 public class InfoDao {
 	SessionFactory sf;
@@ -102,5 +103,40 @@ public class InfoDao {
 				.setString("username", user.getUsername());
 		List<GeoFencing> geoFencings =(List<GeoFencing>)query.list();
 		return geoFencings;
+	}
+	public List<ValidationQuestion> getVqInfo(User user){
+		Session session =sf.getCurrentSession();
+		Query query=session.createQuery("from ValidationQuestion vq where vq.user.username=:username")
+				.setString("username", user.getUsername());
+		List<ValidationQuestion> vqs=query.list();
+		return vqs;
+	}
+	public boolean getFlag(User user){
+		Session session =sf.getCurrentSession();
+		User u=(User) session.createQuery("from User u where u.username = :username")
+				.setString("username",user.getUsername())
+				.uniqueResult();
+		if(u.isFlag()){
+			return true;
+		}		
+		else {
+			return false;
+		}
+	}
+	public void setFlag(User user,boolean f){
+		Session session =sf.getCurrentSession();
+		User u=(User) session.createQuery("from User u where u.username = :username")
+				.setString("username",user.getUsername())
+				.uniqueResult();
+		u.setFlag(f);
+		session.update(u);
+	}
+	
+	public User getContinueUseTime(User user){
+		Session session =sf.getCurrentSession();
+		User u=(User) session.createQuery("from User u where u.username = :username")
+				.setString("username",user.getUsername())
+				.uniqueResult();
+		return u;
 	}
 }
