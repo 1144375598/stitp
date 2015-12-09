@@ -4,12 +4,17 @@
 
 	<constant name="struts.i18n.encoding" value="UTF-8"></constant>
 	<package name="user" namespace="/user" extends="json-default">
-	    
-	    <action name="continueUseTime" class="com.njupt.stitp.server.action.UserAction"
+
+		<action name="lockScreen" class="com.njupt.stitp.server.action.UserAction"
+			method="lockScreen">
+			<result type="json"></result>
+		</action>
+
+		<action name="continueUseTime" class="com.njupt.stitp.server.action.UserAction"
 			method="continueUseTime">
 			<result type="json"></result>
 		</action>
-		
+
 		<action name="login" class="com.njupt.stitp.server.action.UserAction"
 			method="login">
 			<result type="json"></result>
@@ -43,10 +48,12 @@
 			method="resetPassword">
 			<result type="json"></result>
 		</action>
-	<!-- 	<action name="outOfRange" class="com.njupt.stitp.server.action.UserAction"
-			method="outOfRange">
+		<action name="getChild" class="com.njupt.stitp.server.action.UserAction"
+			method="getChild">
 			<result type="json"></result>
-		</action> -->
+		</action>
+		<!-- <action name="outOfRange" class="com.njupt.stitp.server.action.UserAction" 
+			method="outOfRange"> <result type="json"></result> </action> -->
 	</package>
 
 	<package name="uploadInfo" namespace="/uploadInfo" extends="json-default">
@@ -67,7 +74,7 @@
 			<result type="json"></result>
 		</action>
 	</package>
-	
+
 	<package name="downloadInfo" namespace="/downloadInfo" extends="json-default">
 		<action name="appInfo" class="com.njupt.stitp.server.action.DownloadInfoAction"
 			method="downloadAPPInfo">
@@ -81,7 +88,7 @@
 			method="downloadTrackInfo">
 			<result type="json"></result>
 		</action>
-		
+
 		<action name="useTimeControlInfo" class="com.njupt.stitp.server.action.DownloadInfoAction"
 			method="downloadUseTimeControlInfo">
 			<result type="json"></result>

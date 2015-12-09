@@ -19,64 +19,70 @@ public class User {
 	private String cid;
 	private boolean flag;
 	private Set<User> children;
-	
+
 	public boolean isFlag() {
 		return flag;
 	}
+
 	public void setFlag(boolean flag) {
 		this.flag = flag;
 	}
-	
-	
+
 	public String getCid() {
 		return cid;
 	}
+
 	public void setCid(String cid) {
 		this.cid = cid;
 	}
-	
+
 	@ManyToMany
-	@JoinTable(name="relationship",
-    	joinColumns = @JoinColumn(name="parent_id"),
-    	inverseJoinColumns = @JoinColumn(name="child_id")
-	)
+	@JoinTable(name = "relationship", joinColumns = @JoinColumn(name = "parent_id"), inverseJoinColumns = @JoinColumn(name = "child_id"))
 	public Set<User> getChildren() {
 		return children;
 	}
+
 	public void setChildren(Set<User> children) {
 		this.children = children;
 	}
+
 	public int getTimeOfContinuousUse() {
 		return timeOfContinuousUse;
 	}
+
 	public void setTimeOfContinuousUse(int timeOfContinuousUse) {
 		this.timeOfContinuousUse = timeOfContinuousUse;
 	}
+
 	public int getTimeOfContinuousListen() {
 		return timeOfContinuousListen;
 	}
+
 	public void setTimeOfContinuousListen(int timeOfContinuousListen) {
 		this.timeOfContinuousListen = timeOfContinuousListen;
 	}
-	
-	
+
 	@Id
 	public String getUsername() {
 		return username;
 	}
+
 	public void setUsername(String username) {
 		this.username = username;
 	}
+
 	public String getPassword() {
 		return password;
 	}
+
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
+
 	public int getMusicVolume() {
 		return musicVolume;
 	}
+
 	public void setMusicVolume(int musicVolume) {
 		this.musicVolume = musicVolume;
 	}

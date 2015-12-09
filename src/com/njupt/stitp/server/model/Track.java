@@ -1,6 +1,5 @@
 package com.njupt.stitp.server.model;
 
-
 import java.util.Date;
 
 import javax.persistence.Entity;

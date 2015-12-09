@@ -3,6 +3,7 @@ package com.njupt.stitp.server.action;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +27,6 @@ public class DownloadInfoAction {
 	private User user;
 	private String dateString;
 	private InfoManager infoManager = new InfoManager();
-
 
 	public String getDateString() {
 		return dateString;
@@ -52,21 +52,17 @@ public class DownloadInfoAction {
 		this.infoManager = infoManager;
 	}
 
-	
-	
-	public void downloadAPPInfo() {		
+	public void downloadAPPInfo() {
 		/*
-		 * result_code
-		 * 0 查询成功
-		 * 1 参数错误
-		 * 2 无app信息
+		 * result_code 0 查询成功 1 参数错误 2 无app信息
 		 */
-		HttpServletResponse servletResponse = ServletActionContext.getResponse();
+		HttpServletResponse servletResponse = ServletActionContext
+				.getResponse();
 		servletResponse.setContentType("text/html;charset=utf-8");
 		servletResponse.setCharacterEncoding("UTF-8");
-		Map<String, Object> resultMap=new HashMap<String, Object>();
-		SimpleDateFormat sdf =   new SimpleDateFormat( "yyyy-MM-dd" );
-		Date date=null;
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = null;
 		try {
 			date = sdf.parse(dateString);
 		} catch (ParseException e1) {
@@ -77,35 +73,33 @@ public class DownloadInfoAction {
 				e.printStackTrace();
 			}
 			e1.printStackTrace();
-			return ;
-		}	
-		List<APPDto> apps = infoManager.getAPPInfo(user,date);
-		if(apps.size()==0){
-			resultMap.put("result_code",2);
-		} else{
-			resultMap.put("result_code",0);
-			resultMap.put("result", apps);	
-		}			
+			return;
+		}
+		List<APPDto> apps = infoManager.getAPPInfo(user, date);
+		if (apps.size() == 0) {
+			resultMap.put("result_code", 2);
+		} else {
+			resultMap.put("result_code", 0);
+			resultMap.put("result", apps);
+		}
 		try {
 			servletResponse.getWriter().write(new Gson().toJson(resultMap));
 		} catch (IOException e) {
 			e.printStackTrace();
-		}		
+		}
 	}
 
 	public void downloadTrackInfo() {
 		/*
-		 * result_code
-		 * 0 查询成功
-		 * 1 参数错误
-		 * 2 无轨迹信息
+		 * result_code 0 查询成功 1 参数错误 2 无轨迹信息
 		 */
-		HttpServletResponse servletResponse = ServletActionContext.getResponse();
+		HttpServletResponse servletResponse = ServletActionContext
+				.getResponse();
 		servletResponse.setContentType("text/html;charset=utf-8");
 		servletResponse.setCharacterEncoding("UTF-8");
-		Map<String, Object> resultMap=new HashMap<String, Object>();
-		SimpleDateFormat sdf =   new SimpleDateFormat( "yyyy-MM-dd" );
-		Date date=null;
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = null;
 		try {
 			date = sdf.parse(dateString);
 		} catch (ParseException e1) {
@@ -116,116 +110,118 @@ public class DownloadInfoAction {
 				e.printStackTrace();
 			}
 			e1.printStackTrace();
-			return ;
-		}	
-		List<TrackDto> tracks = infoManager.getTrackInfo(user,date);
-		if(tracks.size()==0){
-			resultMap.put("result_code",2);
-		} else{
-			resultMap.put("result_code",0);
-			resultMap.put("result", tracks);	
-		}			
+			return;
+		}
+		List<TrackDto> tracks = infoManager.getTrackInfo(user, date);
+		if (tracks.size() == 0) {
+			resultMap.put("result_code", 2);
+		} else {
+			resultMap.put("result_code", 0);
+			resultMap.put("result", tracks);
+		}
 		try {
 			servletResponse.getWriter().write(new Gson().toJson(resultMap));
 		} catch (IOException e) {
 			e.printStackTrace();
-		}		
+		}
 	}
-	
-	public void downloadTimeControlInfo(){
+
+	public void downloadTimeControlInfo() {
 		/*
-		 * result_code
-		 * 0 查询成功
-		 * 1 无使用时间控制信息
+		 * result_code 0 查询成功 1 无使用时间控制信息
 		 */
-		HttpServletResponse servletResponse = ServletActionContext.getResponse();
+		HttpServletResponse servletResponse = ServletActionContext
+				.getResponse();
 		servletResponse.setContentType("text/html;charset=utf-8");
 		servletResponse.setCharacterEncoding("UTF-8");
-		Map<String, Object> resultMap=new HashMap<String, Object>();
-		List<UseTimeControlDto> useTimeControlDtos = infoManager.getUseTimeControlInfo(user);
-		if(useTimeControlDtos.size()==0){
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		List<UseTimeControlDto> useTimeControlDtos = infoManager
+				.getUseTimeControlInfo(user);
+		if (useTimeControlDtos.size() == 0) {
 			resultMap.put("result_code", "1");
-		} else{
+		} else {
 			resultMap.put("result_code", 0);
 			resultMap.put("result", useTimeControlDtos);
-		}			
-		try {
-			servletResponse.getWriter().write(new Gson().toJson(resultMap));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}		
-	}
-	public void downloadGeoFencingInfo(){
-		/*
-		 * result_code
-		 * 0 查询成功
-		 * 1 无地理围栏信息
-		 */
-		HttpServletResponse servletResponse = ServletActionContext.getResponse();
-		servletResponse.setContentType("text/html;charset=utf-8");
-		servletResponse.setCharacterEncoding("UTF-8");
-		Map<String, Object> resultMap=new HashMap<String, Object>();
-		GeoFencingDto geoFencingDto = infoManager.getGeoFencingInfo(user);
-		if(geoFencingDto.getUsername().equals("")){
-			resultMap.put("result_code", "1");
-		} else{
-			resultMap.put("result_code", 0);
-			resultMap.put("result", geoFencingDto);	
 		}
 		try {
 			servletResponse.getWriter().write(new Gson().toJson(resultMap));
 		} catch (IOException e) {
 			e.printStackTrace();
-		}	
+		}
 	}
-	
-	public void downloadValidationQuestion(){
+
+	public void downloadGeoFencingInfo() {
 		/*
-		 * result_code
-		 * 0 查询成功
-		 * 1 用户未设置验证问题
+		 * result_code 0 查询成功 1 无地理围栏信息
 		 */
-		HttpServletResponse servletResponse = ServletActionContext.getResponse();
+		HttpServletResponse servletResponse = ServletActionContext
+				.getResponse();
 		servletResponse.setContentType("text/html;charset=utf-8");
 		servletResponse.setCharacterEncoding("UTF-8");
-		Map<String, Object> resultMap=new HashMap<String, Object>();
-		
-		List<ValidationQuestionDto> vqds = infoManager.getQuestionInfo(user);
-		if(vqds.size()==0){
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		GeoFencingDto geoFencingDto = infoManager.getGeoFencingInfo(user);
+		List<GeoFencingDto> geoFencingDtos = new ArrayList<GeoFencingDto>();
+		geoFencingDtos.add(geoFencingDto);
+		if (geoFencingDto.getUsername().equals("")) {
 			resultMap.put("result_code", "1");
-		} else{
+		} else {
+			resultMap.put("result_code", 0);
+			resultMap.put("result", geoFencingDtos);
+		}
+		try {
+			servletResponse.getWriter().write(new Gson().toJson(resultMap));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void downloadValidationQuestion() {
+		/*
+		 * result_code 0 查询成功 1 用户未设置验证问题
+		 */
+		HttpServletResponse servletResponse = ServletActionContext
+				.getResponse();
+		servletResponse.setContentType("text/html;charset=utf-8");
+		servletResponse.setCharacterEncoding("UTF-8");
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+
+		List<ValidationQuestionDto> vqds = infoManager.getQuestionInfo(user);
+		if (vqds.size() == 0) {
+			resultMap.put("result_code", "1");
+		} else {
 			resultMap.put("result_code", 0);
 			resultMap.put("result", vqds);
-		}			
+		}
 		try {
 			servletResponse.getWriter().write(new Gson().toJson(resultMap));
 		} catch (IOException e) {
 			e.printStackTrace();
-		}		
+		}
 	}
-	
-	public void downloadContinueUseInfo(){
+
+	public void downloadContinueUseInfo() {
 		/*
-		 * result_code
-		 * 0 查询成功
-		 * 1 未设置护眼时间
+		 * result_code 0 查询成功 1 未设置护眼时间
 		 */
-		HttpServletResponse servletResponse = ServletActionContext.getResponse();
+		HttpServletResponse servletResponse = ServletActionContext
+				.getResponse();
 		servletResponse.setContentType("text/html;charset=utf-8");
 		servletResponse.setCharacterEncoding("UTF-8");
-		Map<String, Object> resultMap=new HashMap<String, Object>();
+		Map<String, Object> resultMap = new HashMap<String, Object>();
 		ContinueUseTimeDto cutd = infoManager.getContinueUseTime(user);
-		if(cutd.getContinueUseTime()==0){
+		List<ContinueUseTimeDto> continueUseTimeDtos = new ArrayList<ContinueUseTimeDto>();
+		continueUseTimeDtos.add(cutd);
+		if (cutd.getContinueUseTime() == 0) {
 			resultMap.put("result_code", "1");
-		}else{
+		} else {
 			resultMap.put("result_code", 0);
-			resultMap.put("result", cutd);
+			resultMap.put("result", continueUseTimeDtos);
 		}
-		
+
 		try {
 			servletResponse.getWriter().write(new Gson().toJson(resultMap));
 		} catch (IOException e) {
 			e.printStackTrace();
-		}	
+		}
 	}
 }

@@ -12,6 +12,7 @@ public class GeoFencing {
 	private double longtitude;
 	private double latitude;
 	private double distance;
+
 	@Id
 	@GeneratedValue
 	public int getId() {
@@ -21,6 +22,7 @@ public class GeoFencing {
 	public void setId(int id) {
 		this.id = id;
 	}
+
 	@OneToOne
 	public User getUser() {
 		return user;

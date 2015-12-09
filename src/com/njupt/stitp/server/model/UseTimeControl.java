@@ -12,21 +12,22 @@ public class UseTimeControl {
 	private User user;
 	private double start;
 	private double end;
-	
+
 	@Id
 	@GeneratedValue
 	public int getId() {
 		return id;
 	}
-	
+
 	public void setId(int id) {
 		this.id = id;
 	}
-	@ManyToOne(fetch=FetchType.LAZY)
+
+	@ManyToOne(fetch = FetchType.LAZY)
 	public User getUser() {
 		return user;
 	}
-	
+
 	public void setUser(User user) {
 		this.user = user;
 	}
@@ -46,5 +47,5 @@ public class UseTimeControl {
 	public void setEnd(double end) {
 		this.end = end;
 	}
-	
+
 }

@@ -31,35 +31,39 @@ public class InfoManager {
 	public InfoDao getInfoDao() {
 		return infoDao;
 	}
+
 	@Resource
 	public void setInfoDao(InfoDao infoDao) {
 		this.infoDao = infoDao;
 	}
-	public void addAPPInfo(APP app){
+
+	public void addAPPInfo(APP app) {
 		infoDao.saveAPPInfo(app);
 	}
-	public void addTrackInfo(Track track){
+
+	public void addTrackInfo(Track track) {
 		infoDao.saveTrackInfo(track);
 	}
-	
-	public List<APPDto> getAPPInfo(User user, Date date){
-		List<APP> appsTemp = infoDao.getAPPInfo(user,date);
-		List<APPDto> apps = new Vector<APPDto>();		
-		for(APP app:appsTemp){
+
+	public List<APPDto> getAPPInfo(User user, Date date) {
+		List<APP> appsTemp = infoDao.getAPPInfo(user, date);
+		List<APPDto> apps = new Vector<APPDto>();
+		for (APP app : appsTemp) {
 			APPDto appDto = new APPDto();
-			appDto.setAppName(app.getAppName());			
+			appDto.setAppName(app.getAppName());
 			appDto.setAppUseTime(app.getAppUseTime());
 			appDto.setDate(app.getAddDate());
 			appDto.setUsername(app.getUser().getUsername());
 			apps.add(appDto);
-		}		
+		}
 		return apps;
 	}
-	public List<TrackDto> getTrackInfo(User user, Date date){
-		List<Track> tracksTemp = infoDao.getTrackInfo(user,date);
-		List<TrackDto> tracks = new Vector<TrackDto>();		
-		for(Track track:tracksTemp){
-			TrackDto trackDto =new TrackDto();
+
+	public List<TrackDto> getTrackInfo(User user, Date date) {
+		List<Track> tracksTemp = infoDao.getTrackInfo(user, date);
+		List<TrackDto> tracks = new Vector<TrackDto>();
+		for (Track track : tracksTemp) {
+			TrackDto trackDto = new TrackDto();
 			trackDto.setLatitude(track.getLatitude());
 			trackDto.setLongitude(track.getLongitude());
 			trackDto.setUsername(track.getUser().getUsername());
@@ -68,31 +72,38 @@ public class InfoManager {
 		}
 		return tracks;
 	}
-	public void addUseTimeControlInfo(UseTimeControl useTimeControl){
+
+	public void addUseTimeControlInfo(UseTimeControl useTimeControl) {
 		infoDao.saveUseTimeControlInfo(useTimeControl);
 	}
-	public  List<UseTimeControlDto> getUseTimeControlInfo(User user){
-		List<UseTimeControl> useTimeControlsTemp= infoDao.getUseTimeControlInfo(user);
-		List<UseTimeControlDto> useTimeControls=new Vector<UseTimeControlDto>();
-		for(UseTimeControl useTimeControl :useTimeControlsTemp){
-			UseTimeControlDto useTimeControlDto =new UseTimeControlDto();
+
+	public List<UseTimeControlDto> getUseTimeControlInfo(User user) {
+		List<UseTimeControl> useTimeControlsTemp = infoDao
+				.getUseTimeControlInfo(user);
+		List<UseTimeControlDto> useTimeControls = new Vector<UseTimeControlDto>();
+		for (UseTimeControl useTimeControl : useTimeControlsTemp) {
+			UseTimeControlDto useTimeControlDto = new UseTimeControlDto();
 			useTimeControlDto.setEnd(useTimeControl.getEnd());
 			useTimeControlDto.setStart(useTimeControl.getStart());
-			useTimeControlDto.setUsername(useTimeControl.getUser().getUsername());
+			useTimeControlDto.setUsername(useTimeControl.getUser()
+					.getUsername());
 			useTimeControls.add(useTimeControlDto);
 		}
 		return useTimeControls;
 	}
-	public void addGenFencingInfo(GeoFencing geoFencing){
+
+	public void addGenFencingInfo(GeoFencing geoFencing) {
 		infoDao.saveGeoFencingInfo(geoFencing);
 	}
-	public GeoFencingDto getGeoFencingInfo(User user){
-		GeoFencingDto geoFencingDto=new GeoFencingDto();
+
+	public GeoFencingDto getGeoFencingInfo(User user) {
+		GeoFencingDto geoFencingDto = new GeoFencingDto();
 		List<GeoFencing> geoFencing = infoDao.getGeoFencingInfo(user);
-		if(geoFencing.size()==0){
-			geoFencingDto.setUsername("");;
+		if (geoFencing.size() == 0) {
+			geoFencingDto.setUsername("");
+			;
 			return geoFencingDto;
-		} else{
+		} else {
 			geoFencingDto.setDistance(geoFencing.get(0).getDistance());
 			geoFencingDto.setLatitude(geoFencing.get(0).getLatitude());
 			geoFencingDto.setLongtitude(geoFencing.get(0).getLongtitude());
@@ -100,10 +111,11 @@ public class InfoManager {
 			return geoFencingDto;
 		}
 	}
-	public List<ValidationQuestionDto> getQuestionInfo(User user){
-		List<ValidationQuestion> vqs= infoDao.getVqInfo(user);
-		List<ValidationQuestionDto> vqds=new Vector<ValidationQuestionDto>();
-		for(ValidationQuestion vq :vqs){
+
+	public List<ValidationQuestionDto> getQuestionInfo(User user) {
+		List<ValidationQuestion> vqs = infoDao.getVqInfo(user);
+		List<ValidationQuestionDto> vqds = new Vector<ValidationQuestionDto>();
+		for (ValidationQuestion vq : vqs) {
 			ValidationQuestionDto vqd = new ValidationQuestionDto();
 			vqd.setAnswer(vq.getAnswer());
 			vqd.setQuestion(vq.getQuestion());
@@ -112,26 +124,28 @@ public class InfoManager {
 		}
 		return vqds;
 	}
-	public boolean outOfRange(Track track){
+
+	public boolean outOfRange(Track track) {
 		double distance;
 		List<GeoFencing> gfs = infoDao.getGeoFencingInfo(track.getUser());
-		for(GeoFencing gf : gfs){
-			distance = CalDistance.calDistance(track.getLatitude(),track.getLongitude(),gf.getLatitude(),gf.getLongtitude());
-			if(distance > gf.getDistance()){
-				//getFlag为true表示超出范围的信息在之前已经发送给家长
-				if(infoDao.getFlag(track.getUser()))
+		for (GeoFencing gf : gfs) {
+			distance = CalDistance.calDistance(track.getLatitude(),
+					track.getLongitude(), gf.getLatitude(), gf.getLongtitude());
+			if (distance > gf.getDistance()) {
+				// getFlag为true表示超出范围的信息在之前已经发送给家长
+				if (infoDao.getFlag(track.getUser()))
 					return false;
 				else {
 					infoDao.setFlag(track.getUser(), true);
 					return true;
-				}					
-			}		
+				}
+			}
 		}
 		infoDao.setFlag(track.getUser(), false);
 		return false;
 	}
-	
-	public ContinueUseTimeDto getContinueUseTime(User user){
+
+	public ContinueUseTimeDto getContinueUseTime(User user) {
 		User u = infoDao.getContinueUseTime(user);
 		ContinueUseTimeDto cutd = new ContinueUseTimeDto();
 		cutd.setContinueUseTime(u.getTimeOfContinuousUse());
