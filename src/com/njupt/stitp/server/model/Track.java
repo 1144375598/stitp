@@ -15,7 +15,10 @@ public class Track {
 	private Date addTime;
 	private double longitude;
 	private double latitude;
-
+	
+	public Track(){
+		user =new User();
+	}
 	public Date getAddTime() {
 		return addTime;
 	}

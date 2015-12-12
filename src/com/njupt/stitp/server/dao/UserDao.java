@@ -3,7 +3,6 @@ package com.njupt.stitp.server.dao;
 import java.util.List;
 
 import javax.annotation.Resource;
-import javax.management.Query;
 
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;

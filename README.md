@@ -23,10 +23,72 @@ http://localhost:8080/NJUPT_STITP_Server/user/register? user.username=?&user.pas
 
 返回json数据，类型为map<String,Object>,例如注册成功，则返回值为{result_code,0}
 上传app信息接口：
-http://localhost:8080/NJUPT_STITP_Server/uploadInfo/appInfo?app.user.username=?&app.appName=?&app.appUseTime=?
+http://localhost:8080/NJUPT_STITP_Server/uploadInfo/appInfo
+使用post方法上传信息至服务器，在上传参数前将字符串编码为UTF-8
+服务器参数为info，该参数存放List<APPDto>的利用gson转换的json字符串，上传过程参考以下代码：（注意，必须要调用getResponseCode方法后请求才会上传到服务器，具体原因未知）
+//appDtos类型为List<APPDto>
+for (int i = 1; i < 4; i++) {
+			APPDto appDto = new APPDto();
+			appDto.setAppName("饿了吗");
+			appDto.setAppUseTime(i);
+			appDto.setUsername(new Integer(i).toString());
+			appDto.setDate(new Date(new java.util.Date().getTime()));
+			appDtos.add(appDto);
+		}
+		String string = new Gson().toJson(appDtos).toString();
+		try {
+			URL url = new URL(
+					"http://localhost:8080/NJUPT_STITP_Server/uploadInfo/appInfo");
+			HttpURLConnection con = (HttpURLConnection) url.openConnection();
+			con.setRequestMethod("POST");
+			con.setConnectTimeout(8000);
+			con.setDoOutput(true);
+			con.setDoInput(true);
+			con.connect();
+			DataOutputStream out = new DataOutputStream(con.getOutputStream());
+			out.writeBytes("info=" + URLEncoder.encode(string, "UTF-8"));
+			System.out.println(con.getResponseCode());
+			con.disconnect();
+		} catch (ProtocolException e) {
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 上传轨迹信息接口：
-http://localhost:8080/NJUPT_STITP_Server/uploadInfo/trackInfo?track.user.username=?&track.longitude=?&track.latitude=?& track.addTime=yyyy-MM-dd HH:mm:ss
-longitude为经度，latitude为纬度,addTime为经纬度时间(如2004-5-31 23:59:59)
+http://localhost:8080/NJUPT_STITP_Server/uploadInfo/trackInfo
+使用post方法上传信息至服务器，在上传参数前将字符串编码为UTF-8
+服务器参数为info，该参数存放List<TrackDto>的利用gson转换的json字符串，上传过程参考以下代码：（注意，必须要调用getResponseCode方法后请求才会上传到服务器，具体原因未知）
+for (int i = 1; i < 4; i++) {
+			TrackDto trackDto = new TrackDto();
+			trackDto.setAddTime(new java.util.Date());
+			trackDto.setLatitude(i);
+			trackDto.setLongitude(i);
+			trackDto.setUsername(new Integer(i).toString());
+			trackDtos.add(trackDto);
+		}
+		String string = new Gson().toJson(trackDtos).toString();
+		System.out.println(string);
+		try {
+			URL url = new URL(
+					"http://localhost:8080/NJUPT_STITP_Server/uploadInfo/trackInfo");
+			HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
+			con.setRequestMethod("POST");
+			con.setConnectTimeout(50000);
+			con.setDoOutput(true);
+			con.setDoInput(true);
+			DataOutputStream out = new DataOutputStream(con.getOutputStream());
+			out.writeBytes("info=" + URLEncoder.encode(string, "UTF-8"));
+System.out.println(con.getResponseCode());
+			con.disconnect();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 
 
 

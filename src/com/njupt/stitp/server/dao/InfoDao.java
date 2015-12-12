@@ -30,28 +30,33 @@ public class InfoDao {
 		this.sf = sf;
 	}
 
-	public void saveTrackInfo(Track track) {
-		sf.getCurrentSession().save(track);
+	public void saveTrackInfo(List<Track> tracks) {
+		Session session = sf.getCurrentSession();
+		for (Track track : tracks) {
+			session.save(track);
+		}
 	}
 
 	public void saveUseTimeControlInfo(UseTimeControl useTimeControl) {
 		sf.getCurrentSession().save(useTimeControl);
 	}
 
-	public void saveAPPInfo(APP app) {
+	public void saveAPPInfo(List<APP> apps) {
 		Session session = sf.getCurrentSession();
-		Query query = session
-				.createQuery(
-						"from APP app where app.user.username=:username and app.addDate=:addDate and app.appName=:appName")
-				.setString("username", app.getUser().getUsername())
-				.setDate("addDate", app.getAddDate())
-				.setString("appName", app.getAppName());
-		List<APP> apps = (List<APP>) query.list();
-		if (apps.size() == 0) {
-			session.save(app);
-		} else {
-			apps.get(0).setAppUseTime(app.getAppUseTime());
-			session.update(apps.get(0));
+		for (APP app : apps) {
+			Query query = session
+					.createQuery(
+							"from APP app where app.user.username=:username and app.addDate=:addDate and app.appName=:appName")
+					.setString("username", app.getUser().getUsername())
+					.setDate("addDate", app.getAddDate())
+					.setString("appName", app.getAppName());
+			List<APP> apps2 = (List<APP>) query.list();
+			if (apps2.size() == 0) {
+				session.save(app);
+			} else {
+				apps2.get(0).setAppUseTime(app.getAppUseTime());
+				session.update(apps2.get(0));
+			}
 		}
 	}
 

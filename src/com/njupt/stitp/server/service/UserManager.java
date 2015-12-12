@@ -2,16 +2,13 @@ package com.njupt.stitp.server.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Component;
 
 import com.njupt.stitp.server.dao.UserDao;
-import com.njupt.stitp.server.dto.TrackDto;
 import com.njupt.stitp.server.dto.UserDto;
-import com.njupt.stitp.server.model.Track;
 import com.njupt.stitp.server.model.User;
 
 @Component

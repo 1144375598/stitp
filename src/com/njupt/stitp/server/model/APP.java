@@ -16,7 +16,10 @@ public class APP {
 	private int appUseTime;
 	private String appName;
 	private Date addDate;
-
+	
+	public APP(){
+		user=new User();
+	}
 	@Id
 	@GeneratedValue
 	public int getId() {

@@ -1,7 +1,7 @@
 package com.njupt.stitp.server.service;
 
+import java.util.ArrayList;
 import java.util.Date;
-
 import java.util.List;
 import java.util.Vector;
 
@@ -9,6 +9,8 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Component;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.njupt.stitp.server.dao.InfoDao;
 import com.njupt.stitp.server.dto.APPDto;
 import com.njupt.stitp.server.dto.ContinueUseTimeDto;
@@ -22,6 +24,7 @@ import com.njupt.stitp.server.model.Track;
 import com.njupt.stitp.server.model.UseTimeControl;
 import com.njupt.stitp.server.model.User;
 import com.njupt.stitp.server.model.ValidationQuestion;
+import com.njupt.stitp.sever.util.BaiduPush;
 import com.njupt.stitp.sever.util.CalDistance;
 
 @Component
@@ -37,12 +40,47 @@ public class InfoManager {
 		this.infoDao = infoDao;
 	}
 
-	public void addAPPInfo(APP app) {
-		infoDao.saveAPPInfo(app);
+	public void addAPPInfo(String appInfo) {
+		Gson gson = new Gson();
+		List<APPDto> apps =gson.fromJson(appInfo,
+				new TypeToken<List<APPDto>>() {
+				}.getType()); 
+		List<APP> apps2 = new ArrayList<APP>();
+		for(APPDto appDto:apps){
+			APP app=new APP();
+			app.setAddDate(appDto.getDate());
+			app.setAppName(appDto.getAppName());
+			app.setAppUseTime(appDto.getAppUseTime());
+			app.getUser().setUsername(appDto.getUsername());
+			apps2.add(app);
+		}
+		infoDao.saveAPPInfo(apps2);
 	}
 
-	public void addTrackInfo(Track track) {
-		infoDao.saveTrackInfo(track);
+	public void addTrackInfo(String trackInfo) {
+		Gson gson = new Gson();
+		List<TrackDto> tracks =gson.fromJson(trackInfo,
+				new TypeToken<List<TrackDto>>() {
+				}.getType()); 
+		List<Track> tracks2 = new ArrayList<Track>();
+		for(TrackDto trackDto:tracks){
+			Track track=new Track();
+			track.setAddTime(trackDto.getAddTime());
+			track.setLatitude(trackDto.getLatitude());
+			track.setLongitude(trackDto.getLongitude());
+			track.getUser().setUsername(trackDto.getUsername());
+			if(outOfRange(track)){
+				UserManager userManager=new UserManager();
+				List<User> users = userManager.getParents(track.getUser());
+				for (User user : users) {
+					String mes = track.getUser().getUsername() + ", out of range";
+					BaiduPush.PushMsgToSingle(
+							userManager.getCidByUsername(user.getUsername()), mes);
+				}
+			}
+			tracks2.add(track);
+		}
+		infoDao.saveTrackInfo(tracks2);
 	}
 
 	public List<APPDto> getAPPInfo(User user, Date date) {
