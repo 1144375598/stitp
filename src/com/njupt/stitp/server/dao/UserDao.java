@@ -119,14 +119,21 @@ public class UserDao {
 		u.setTimeOfContinuousUse(user.getTimeOfContinuousUse());
 		s.update(u);
 	}
-	public List<User> getChild(String parentsName){
+
+	public List<User> getChild(String parentsName) {
 		Session s = sf.getCurrentSession();
 		SQLQuery query = ((SQLQuery) s
 				.createSQLQuery(
 						"select * from user where username in (select child_id from relationship where parent_id = :username) ")
-				.setString("username", parentsName))
-				.addEntity(User.class);
+				.setString("username", parentsName)).addEntity(User.class);
 		List<User> childs = query.list();
 		return childs;
+	}
+
+	public User getUser(String username) {
+		Session s = sf.getCurrentSession();
+		User u = (User) s.createQuery("from User u where u.username=:username")
+				.setString("username", username).uniqueResult();
+		return u;
 	}
 }

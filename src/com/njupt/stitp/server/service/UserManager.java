@@ -81,4 +81,14 @@ public class UserManager {
 		}
 		return childs;
 	}
+	public UserDto getUser(String username){
+		UserDto userDto = new UserDto();
+		User user=userDao.getUser(username);
+		userDto.setCid(user.getCid() == null ? "0" : user.getCid());
+		userDto.setMusicVolume(user.getMusicVolume());
+		userDto.setTimeOfContinuousListen(user.getTimeOfContinuousListen());
+		userDto.setTimeOfContinuousUse(user.getTimeOfContinuousUse());
+		userDto.setUsername(user.getUsername());
+		return userDto;
+	}
 }

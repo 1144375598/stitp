@@ -278,4 +278,23 @@ public class UserAction extends ActionSupport {
 			e.printStackTrace();
 		}
 	}
+	public void getInfo(){
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		HttpServletResponse servletResponse = ServletActionContext
+				.getResponse();
+		servletResponse.setContentType("text/html;charset=utf-8");
+		servletResponse.setCharacterEncoding("UTF-8");
+		UserDto userDto=userManager.getUser(user.getUsername());
+		if(userDto==null){
+			resultMap.put("result_code", 1);
+		}else{
+			resultMap.put("result_code", 0);
+			resultMap.put("result", userDto);
+		}
+		try {
+			servletResponse.getWriter().write(new Gson().toJson(resultMap));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }
