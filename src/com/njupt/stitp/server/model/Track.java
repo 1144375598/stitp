@@ -15,6 +15,8 @@ public class Track {
 	private Date addTime;
 	private double longitude;
 	private double latitude;
+	private String address;
+	private int stayTime;//在该地点停留的时间
 	
 	public Track(){
 		user =new User();
@@ -60,6 +62,18 @@ public class Track {
 
 	public void setLatitude(double latitude) {
 		this.latitude = latitude;
+	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	public int getStayTime() {
+		return stayTime;
+	}
+	public void setStayTime(int stayTime) {
+		this.stayTime = stayTime;
 	}
 
 }

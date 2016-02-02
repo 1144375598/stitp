@@ -18,7 +18,26 @@ public class User {
 	private int musicVolume;
 	private String cid;
 	private boolean flag;
+	private String question;
+	private String answer;
 	private Set<User> children;
+
+	public String getQuestion() {
+		return question;
+	}
+
+	public void setQuestion(String question) {
+		this.question = question;
+	}
+
+	public String getAnswer() {
+		return answer;
+	}
+
+	public void setAnswer(String answer) {
+		this.answer = answer;
+	}
+
 
 	public boolean isFlag() {
 		return flag;

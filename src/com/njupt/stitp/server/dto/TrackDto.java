@@ -4,9 +4,27 @@ import java.util.Date;
 
 public class TrackDto {
 	private String username;
-	private Date addTime;
+	private String addTime;
 	private double longitude;
 	private double latitude;
+	private int stayTime;
+	private String address;
+
+	public int getStayTime() {
+		return stayTime;
+	}
+
+	public void setStayTime(int stayTime) {
+		this.stayTime = stayTime;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
 
 	public String getUsername() {
 		return username;
@@ -16,11 +34,11 @@ public class TrackDto {
 		this.username = username;
 	}
 
-	public Date getAddTime() {
+	public String getAddTime() {
 		return addTime;
 	}
 
-	public void setAddTime(Date addTime) {
+	public void setAddTime(String addTime) {
 		this.addTime = addTime;
 	}
 

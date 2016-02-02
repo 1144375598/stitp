@@ -1,6 +1,7 @@
 package com.njupt.stitp.server.action;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -15,8 +16,8 @@ import com.google.gson.Gson;
 import com.njupt.stitp.server.dto.UserDto;
 import com.njupt.stitp.server.model.User;
 import com.njupt.stitp.server.service.UserManager;
-import com.njupt.stitp.sever.util.BaiduPush;
-import com.njupt.stitp.sever.util.MD5Code;
+import com.njupt.stitp.server.util.BaiduPush;
+import com.njupt.stitp.server.util.MD5Code;
 import com.opensymphony.xwork2.ActionSupport;
 
 public class UserAction extends ActionSupport {
@@ -87,7 +88,6 @@ public class UserAction extends ActionSupport {
 		/*
 		 * result_code: 0: 登陆成功！ 1：登陆失败，用户名或密码错误！ 2：登陆失败，用户名不存在！
 		 */
-		System.out.println("*************************" + user.getUsername());
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		HttpServletResponse servletResponse = ServletActionContext
 				.getResponse();
@@ -248,17 +248,21 @@ public class UserAction extends ActionSupport {
 
 	public void continueUseTime() {
 		userManager.updateContinueTime(user);
-		BaiduPush.PushMsgToSingle(userManager.getCidByUsername(user.getUsername()), "ContinueUseTime updated");
+		BaiduPush.PushMsgToSingle(
+				userManager.getCidByUsername(user.getUsername()),
+				"ContinueUseTime updated");
 	}
 
 	public void lockScreen() {
-		BaiduPush.PushMsgToSingle(userManager.getCidByUsername(user.getUsername()),"lock screen");
+		BaiduPush
+				.PushMsgToSingle(
+						userManager.getCidByUsername(user.getUsername()),
+						"lock screen");
 	}
-	public void getChild(){
+
+	public void getChild() {
 		/*
-		 * result_code:
-		 * 0：有孩子
-		 * 1:无孩子
+		 * result_code: 0：有孩子 1:无孩子
 		 */
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		HttpServletResponse servletResponse = ServletActionContext
@@ -266,9 +270,9 @@ public class UserAction extends ActionSupport {
 		servletResponse.setContentType("text/html;charset=utf-8");
 		servletResponse.setCharacterEncoding("UTF-8");
 		List<UserDto> childs = userManager.getChild(user.getUsername());
-		if(childs.size()==0){
+		if (childs.size() == 0) {
 			resultMap.put("result_code", 1);
-		}else{
+		} else {
 			resultMap.put("result_code", 0);
 			resultMap.put("result", childs);
 		}
@@ -278,18 +282,41 @@ public class UserAction extends ActionSupport {
 			e.printStackTrace();
 		}
 	}
-	public void getInfo(){
+
+	public void getInfo() {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		HttpServletResponse servletResponse = ServletActionContext
 				.getResponse();
 		servletResponse.setContentType("text/html;charset=utf-8");
 		servletResponse.setCharacterEncoding("UTF-8");
-		UserDto userDto=userManager.getUser(user.getUsername());
-		if(userDto==null){
+		UserDto userDto = userManager.getUser(user.getUsername());
+		if (userDto == null) {
 			resultMap.put("result_code", 1);
-		}else{
+		} else {
 			resultMap.put("result_code", 0);
 			resultMap.put("result", userDto);
+		}
+		try {
+			servletResponse.getWriter().write(new Gson().toJson(resultMap));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void getValidation() {
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		HttpServletResponse servletResponse = ServletActionContext
+				.getResponse();
+		servletResponse.setContentType("text/html;charset=utf-8");
+		servletResponse.setCharacterEncoding("UTF-8");
+		if (!userManager.exists(user)) {
+			resultMap.put("result_code", 1);
+		} else {
+			Map<String, String> validation = userManager.getValidation(user
+					.getUsername());
+			resultMap.put("result_code", 0);
+			resultMap.put("question", validation.get("question"));
+			resultMap.put("answer", validation.get("answer"));
 		}
 		try {
 			servletResponse.getWriter().write(new Gson().toJson(resultMap));

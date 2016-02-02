@@ -19,7 +19,6 @@ import com.njupt.stitp.server.dto.ContinueUseTimeDto;
 import com.njupt.stitp.server.dto.GeoFencingDto;
 import com.njupt.stitp.server.dto.TrackDto;
 import com.njupt.stitp.server.dto.UseTimeControlDto;
-import com.njupt.stitp.server.dto.ValidationQuestionDto;
 import com.njupt.stitp.server.model.User;
 import com.njupt.stitp.server.service.InfoManager;
 
@@ -175,29 +174,7 @@ public class DownloadInfoAction {
 		}
 	}
 
-	public void downloadValidationQuestion() {
-		/*
-		 * result_code 0 查询成功 1 用户未设置验证问题
-		 */
-		HttpServletResponse servletResponse = ServletActionContext
-				.getResponse();
-		servletResponse.setContentType("text/html;charset=utf-8");
-		servletResponse.setCharacterEncoding("UTF-8");
-		Map<String, Object> resultMap = new HashMap<String, Object>();
 
-		List<ValidationQuestionDto> vqds = infoManager.getQuestionInfo(user);
-		if (vqds.size() == 0) {
-			resultMap.put("result_code", "1");
-		} else {
-			resultMap.put("result_code", 0);
-			resultMap.put("result", vqds);
-		}
-		try {
-			servletResponse.getWriter().write(new Gson().toJson(resultMap));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 
 	public void downloadContinueUseInfo() {
 		/*

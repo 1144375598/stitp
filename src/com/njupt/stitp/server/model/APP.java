@@ -2,10 +2,12 @@ package com.njupt.stitp.server.model;
 
 import java.sql.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 
 @Entity
@@ -16,10 +18,12 @@ public class APP {
 	private int appUseTime;
 	private String appName;
 	private Date addDate;
-	
-	public APP(){
-		user=new User();
+	private String icon;
+
+	public APP() {
+		user = new User();
 	}
+
 	@Id
 	@GeneratedValue
 	public int getId() {
@@ -61,6 +65,25 @@ public class APP {
 
 	public void setAppUseTime(int appUseTime) {
 		this.appUseTime = appUseTime;
+	}
+
+	/*
+	 * @Lob
+	 * 
+	 * @Column(name = "icon", columnDefinition = "BLOB", nullable = true) public
+	 * byte[] getIcon() { return icon; }
+	 * 
+	 * public void setIcon(byte[] icon) { this.icon = icon; }
+	 */
+
+	@Lob
+	@Column(name = "icon", columnDefinition = "LONGTEXT", nullable = true)
+	public String getIcon() {
+		return icon;
+	}
+
+	public void setIcon(String icon) {
+		this.icon = icon;
 	}
 
 }

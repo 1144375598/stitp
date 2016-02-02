@@ -1,20 +1,12 @@
 package com.njupt.stitp.server.dto;
 
-import java.sql.Date;
 
 public class APPDto {
 	private String username;
 	private int appUseTime;
 	private String appName;
-	private Date date;
-
-	public Date getDate() {
-		return date;
-	}
-
-	public void setDate(Date date) {
-		this.date = date;
-	}
+	private String addDate;
+	private String icon;
 
 	public String getUsername() {
 		return username;
@@ -39,5 +31,22 @@ public class APPDto {
 	public void setAppName(String appName) {
 		this.appName = appName;
 	}
+
+	public String getAddDate() {
+		return addDate;
+	}
+
+	public void setAddDate(String addDate) {
+		this.addDate = addDate;
+	}
+
+	public String getIcon() {
+		return icon;
+	}
+
+	public void setIcon(String icon) {
+		this.icon = icon;
+	}
+
 
 }

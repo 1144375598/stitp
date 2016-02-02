@@ -1,7 +1,5 @@
 package com.njupt.stitp.server.action;
 
-import java.io.UnsupportedEncodingException;
-
 import com.njupt.stitp.server.model.GeoFencing;
 import com.njupt.stitp.server.model.UseTimeControl;
 import com.njupt.stitp.server.service.InfoManager;

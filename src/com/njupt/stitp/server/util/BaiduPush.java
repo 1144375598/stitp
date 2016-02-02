@@ -1,4 +1,4 @@
-package com.njupt.stitp.sever.util;
+package com.njupt.stitp.server.util;
 
 import com.baidu.yun.core.log.YunLogEvent;
 import com.baidu.yun.core.log.YunLogHandler;
@@ -14,8 +14,8 @@ public class BaiduPush {
 	/*
 	 * 1. 创建PushKeyPair用于app的合法身份认证apikey和secretKey可在应用详情中获取
 	 */
-	private static String apiKey = " BncGKsUxUdukVDGGwGogcWbe";
-	private static String secretKey = "vGpYviHFZPGMVyFYd9S3Y5GkEVSAy1Cf";
+	private static String apiKey = " ebI4sTvwMxkiayc62NCO3NwR ";
+	private static String secretKey = "jX3XVhd6S3girG3UUL3rOPiScy8dpDRl";
 	private static PushKeyPair pair = new PushKeyPair(apiKey, secretKey);
 
 	// 2. 创建BaiduPushClient，访问SDK接口

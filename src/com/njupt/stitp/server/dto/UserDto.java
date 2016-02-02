@@ -5,6 +5,24 @@ public class UserDto {
 	private int timeOfContinuousUse;
 	private int timeOfContinuousListen;
 	private int musicVolume;
+	private String question;
+	private String answer;
+	public String getQuestion() {
+		return question;
+	}
+
+	public void setQuestion(String question) {
+		this.question = question;
+	}
+
+	public String getAnswer() {
+		return answer;
+	}
+
+	public void setAnswer(String answer) {
+		this.answer = answer;
+	}
+
 	private String cid;
 
 	public String getUsername() {

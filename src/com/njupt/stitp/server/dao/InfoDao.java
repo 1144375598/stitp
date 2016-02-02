@@ -15,7 +15,6 @@ import com.njupt.stitp.server.model.GeoFencing;
 import com.njupt.stitp.server.model.Track;
 import com.njupt.stitp.server.model.UseTimeControl;
 import com.njupt.stitp.server.model.User;
-import com.njupt.stitp.server.model.ValidationQuestion;
 
 @Component
 public class InfoDao {
@@ -127,13 +126,12 @@ public class InfoDao {
 		return geoFencings;
 	}
 
-	public List<ValidationQuestion> getVqInfo(User user) {
+	public User getVqInfo(User user) {
 		Session session = sf.getCurrentSession();
-		Query query = session.createQuery(
-				"from ValidationQuestion vq where vq.user.username=:username")
-				.setString("username", user.getUsername());
-		List<ValidationQuestion> vqs = query.list();
-		return vqs;
+		User u = (User) session.createQuery(
+				"from User u where u.username=:username")
+				.setString("username", user.getUsername()).uniqueResult();		
+		return u;
 	}
 
 	public boolean getFlag(User user) {
@@ -164,4 +162,5 @@ public class InfoDao {
 				.setString("username", user.getUsername()).uniqueResult();
 		return u;
 	}
+
 }

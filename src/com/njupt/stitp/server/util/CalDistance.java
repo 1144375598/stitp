@@ -1,4 +1,4 @@
-package com.njupt.stitp.sever.util;
+package com.njupt.stitp.server.util;
 
 public class CalDistance {
 

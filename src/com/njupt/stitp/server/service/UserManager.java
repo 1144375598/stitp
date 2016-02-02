@@ -1,7 +1,9 @@
 package com.njupt.stitp.server.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -90,5 +92,12 @@ public class UserManager {
 		userDto.setTimeOfContinuousUse(user.getTimeOfContinuousUse());
 		userDto.setUsername(user.getUsername());
 		return userDto;
+	}
+	public Map<String, String> getValidation(String username){
+		Map<String, String> validation =new HashMap<String, String>();
+		User user=userDao.getUser(username);
+		validation.put("question", user.getQuestion());
+		validation.put("answer", user.getAnswer());
+		return validation;
 	}
 }

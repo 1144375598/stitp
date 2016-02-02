@@ -55,8 +55,10 @@
 			method="getChild">
 			<result type="json"></result>
 		</action>
-		<!-- <action name="outOfRange" class="com.njupt.stitp.server.action.UserAction" 
-			method="outOfRange"> <result type="json"></result> </action> -->
+		<action name="getValidation" class="com.njupt.stitp.server.action.UserAction"
+		    method="getValidation">
+		    <result type="json"></result>
+		</action>
 	</package>
 
 	<package name="uploadInfo" namespace="/uploadInfo" extends="json-default">
@@ -98,10 +100,6 @@
 		</action>
 		<action name="geoFencingInfo" class="com.njupt.stitp.server.action.DownloadInfoAction"
 			method="downloadGeoFencingInfo">
-			<result type="json"></result>
-		</action>
-		<action name="validationQuestionInfo" class="com.njupt.stitp.server.action.DownloadInfoAction"
-			method="downlaodValidationQuestion">
 			<result type="json"></result>
 		</action>
 	</package>
