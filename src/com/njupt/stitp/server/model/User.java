@@ -13,6 +13,7 @@ public class User {
 
 	private String username;
 	private String password;
+	private String lockPwd;
 	private int timeOfContinuousUse;
 	private int timeOfContinuousListen;
 	private int musicVolume;
@@ -20,7 +21,24 @@ public class User {
 	private boolean flag;
 	private String question;
 	private String answer;
+	private String QQ;
 	private Set<User> children;
+
+	public String getQQ() {
+		return QQ;
+	}
+
+	public void setQQ(String qQ) {
+		QQ = qQ;
+	}
+
+	public String getLockPwd() {
+		return lockPwd;
+	}
+
+	public void setLockPwd(String lockPwd) {
+		this.lockPwd = lockPwd;
+	}
 
 	public String getQuestion() {
 		return question;
@@ -37,7 +55,6 @@ public class User {
 	public void setAnswer(String answer) {
 		this.answer = answer;
 	}
-
 
 	public boolean isFlag() {
 		return flag;

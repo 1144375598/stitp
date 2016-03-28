@@ -79,25 +79,33 @@ public class UserManager {
 			userDto.setTimeOfContinuousListen(user.getTimeOfContinuousListen());
 			userDto.setTimeOfContinuousUse(user.getTimeOfContinuousUse());
 			userDto.setUsername(user.getUsername());
+			userDto.setQQ(user.getQQ());
 			childs.add(userDto);
 		}
 		return childs;
 	}
-	public UserDto getUser(String username){
+
+	public UserDto getUser(String username) {
 		UserDto userDto = new UserDto();
-		User user=userDao.getUser(username);
+		User user = userDao.getUser(username);
 		userDto.setCid(user.getCid() == null ? "0" : user.getCid());
 		userDto.setMusicVolume(user.getMusicVolume());
 		userDto.setTimeOfContinuousListen(user.getTimeOfContinuousListen());
 		userDto.setTimeOfContinuousUse(user.getTimeOfContinuousUse());
 		userDto.setUsername(user.getUsername());
+		userDto.setQQ(user.getQQ());
 		return userDto;
 	}
-	public Map<String, String> getValidation(String username){
-		Map<String, String> validation =new HashMap<String, String>();
-		User user=userDao.getUser(username);
+
+	public Map<String, String> getValidation(String username) {
+		Map<String, String> validation = new HashMap<String, String>();
+		User user = userDao.getUser(username);
 		validation.put("question", user.getQuestion());
 		validation.put("answer", user.getAnswer());
 		return validation;
+	}
+
+	public void updateLockPwd(String lockPwd, String username) {
+		userDao.updateLockPwd(lockPwd, username);
 	}
 }

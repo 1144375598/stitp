@@ -4,7 +4,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 import javax.annotation.Resource;
@@ -28,7 +30,6 @@ import com.njupt.stitp.server.model.Track;
 import com.njupt.stitp.server.model.UseTimeControl;
 import com.njupt.stitp.server.model.User;
 import com.njupt.stitp.server.util.BaiduPush;
-import com.njupt.stitp.server.util.CalDistance;
 
 @Component
 public class InfoManager {
@@ -87,17 +88,6 @@ public class InfoManager {
 			track.setAddress(trackDto.getAddress());
 			track.setStayTime(trackDto.getStayTime());
 			track.getUser().setUsername(trackDto.getUsername());
-			if (outOfRange(track)) {
-				UserManager userManager = new UserManager();
-				List<User> users = userManager.getParents(track.getUser());
-				for (User user : users) {
-					String mes = track.getUser().getUsername()
-							+ ", out of range";
-					BaiduPush.PushMsgToSingle(
-							userManager.getCidByUsername(user.getUsername()),
-							mes);
-				}
-			}
 			tracks2.add(track);
 		}
 		infoDao.saveTrackInfo(tracks2);
@@ -137,8 +127,28 @@ public class InfoManager {
 		return tracks;
 	}
 
-	public void addUseTimeControlInfo(UseTimeControl useTimeControl) {
-		infoDao.saveUseTimeControlInfo(useTimeControl);
+	public void addUseTimeControlInfo(String info) {
+
+		Gson gson = new Gson();
+		List<UseTimeControlDto> useTimeControlDtos = gson.fromJson(info,
+				new TypeToken<List<UseTimeControlDto>>() {
+				}.getType());
+		String username = useTimeControlDtos.get(0).getUsername();
+		List<UseTimeControl> list = new ArrayList<UseTimeControl>();
+		for (UseTimeControlDto useTimeControlDto : useTimeControlDtos) {
+			UseTimeControl useTimeControl = new UseTimeControl();
+			useTimeControl.setEnd(useTimeControlDto.getEnd());
+			useTimeControl.setStart(useTimeControlDto.getStart());
+			useTimeControl.getUser().setUsername(
+					useTimeControlDto.getUsername());
+			list.add(useTimeControl);
+		}
+		infoDao.saveUseTimeControlInfo(list);
+		Map<String, String> params = new HashMap<String, String>();
+		params.put("username", username);
+		params.put("serviceCode", "10");
+		BaiduPush.pushMsgToSingle(new UserManager().getCidByUsername(username),
+				params, 12 * 3600);
 	}
 
 	public List<UseTimeControlDto> getUseTimeControlInfo(User user) {
@@ -158,6 +168,25 @@ public class InfoManager {
 
 	public void addGenFencingInfo(GeoFencing geoFencing) {
 		infoDao.saveGeoFencingInfo(geoFencing);
+		
+		Map<String, String> params = new HashMap<String, String>();
+		params.put("username", geoFencing.getUser().getUsername());
+		params.put("serviceCode", "15");
+		params.put("changeName", geoFencing.getUser().getUsername());
+		BaiduPush.pushMsgToSingle(new UserManager().getCidByUsername(geoFencing
+				.getUser().getUsername()), params, 12 * 3600);
+		UserManager userManager = new UserManager();
+		List<User> parents = userManager.getParents(geoFencing.getUser());
+		for (User parent : parents) {
+			params.clear();
+			params.put("username", parent.getUsername());
+			params.put("serviceCode", "15");
+			params.put("changeName", geoFencing.getUser().getUsername());
+			BaiduPush.pushMsgToSingle(
+					userManager.getCidByUsername(parent.getUsername()), params,
+					12 * 3600);
+		}
+
 	}
 
 	public GeoFencingDto getGeoFencingInfo(User user) {
@@ -165,35 +194,15 @@ public class InfoManager {
 		List<GeoFencing> geoFencing = infoDao.getGeoFencingInfo(user);
 		if (geoFencing.size() == 0) {
 			geoFencingDto.setUsername("");
-			;
 			return geoFencingDto;
 		} else {
 			geoFencingDto.setDistance(geoFencing.get(0).getDistance());
 			geoFencingDto.setLatitude(geoFencing.get(0).getLatitude());
-			geoFencingDto.setLongtitude(geoFencing.get(0).getLongtitude());
+			geoFencingDto.setLongitude(geoFencing.get(0).getLongitude());
+			geoFencingDto.setAddress(geoFencing.get(0).getAddress());
 			geoFencingDto.setUsername(user.getUsername());
 			return geoFencingDto;
 		}
-	}
-
-	public boolean outOfRange(Track track) {
-		double distance;
-		List<GeoFencing> gfs = infoDao.getGeoFencingInfo(track.getUser());
-		for (GeoFencing gf : gfs) {
-			distance = CalDistance.calDistance(track.getLatitude(),
-					track.getLongitude(), gf.getLatitude(), gf.getLongtitude());
-			if (distance > gf.getDistance()) {
-				// getFlag为true表示超出范围的信息在之前已经发送给家长
-				if (infoDao.getFlag(track.getUser()))
-					return false;
-				else {
-					infoDao.setFlag(track.getUser(), true);
-					return true;
-				}
-			}
-		}
-		infoDao.setFlag(track.getUser(), false);
-		return false;
 	}
 
 	public ContinueUseTimeDto getContinueUseTime(User user) {
@@ -202,5 +211,9 @@ public class InfoManager {
 		cutd.setContinueUseTime(u.getTimeOfContinuousUse());
 		cutd.setUsername(u.getUsername());
 		return cutd;
+	}
+
+	public void deleteUseTimeControl(UseTimeControl useTimeControl) {
+		infoDao.deleteUseTimeControl(useTimeControl);
 	}
 }

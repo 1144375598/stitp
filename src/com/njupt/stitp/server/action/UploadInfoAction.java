@@ -53,11 +53,12 @@ public class UploadInfoAction {
 	}
 
 	public void uploadUseTimeControlInfo() {
-		infoManager.addUseTimeControlInfo(useTimeControl);
+		infoManager.addUseTimeControlInfo(info);
 	}
 
 	public void uploadGenFencingInfo() {
 		infoManager.addGenFencingInfo(geoFencing);
+		System.out.println(geoFencing);
 	}
 
 	public GeoFencing getGeoFencing() {

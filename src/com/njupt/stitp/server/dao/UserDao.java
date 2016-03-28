@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -68,10 +69,12 @@ public class UserDao {
 
 	public void updateCid(User user) {
 		Session s = sf.getCurrentSession();
-		User u = (User) s.createQuery("from User u where u.username=:username")
-				.setString("username", user.getUsername()).uniqueResult();
-		u.setCid(user.getCid());
-		s.update(u);
+		Query query = s
+				.createQuery(
+						"update User u set u.cid=:cid where u.username=:username")
+				.setString("cid", user.getCid())
+				.setString("username", user.getUsername());
+		query.executeUpdate();
 	}
 
 	public String getCidByUsername(String username) {
@@ -94,10 +97,12 @@ public class UserDao {
 
 	public void updatePassword(User user) {
 		Session s = sf.getCurrentSession();
-		User u = (User) s.createQuery("from User u where u.username=:username")
-				.setString("username", user.getUsername()).uniqueResult();
-		u.setPassword(user.getPassword());
-		s.update(u);
+		Query query = s
+				.createQuery(
+						"update User u set u.password=:password where u.username=:username")
+				.setString("password", user.getPassword())
+				.setString("username", user.getUsername());
+		query.executeUpdate();
 	}
 
 	public List<User> getParents(User user) {
@@ -108,16 +113,18 @@ public class UserDao {
 				.setString("username", user.getUsername()))
 				.addEntity(User.class);
 		List<User> users = query.list();
-		/* System.out.println("****************************"+users); */
 		return users;
 	}
 
 	public void updateContinueTime(User user) {
 		Session s = sf.getCurrentSession();
-		User u = (User) s.createQuery("from User u where u.username=:username")
-				.setString("username", user.getUsername()).uniqueResult();
-		u.setTimeOfContinuousUse(user.getTimeOfContinuousUse());
-		s.update(u);
+		Query query = s
+				.createQuery(
+						"update User u set u.timeOfContinuousUse=:useTime where u.username=:username")
+				.setString("useTime",
+						((Integer) user.getTimeOfContinuousUse()).toString())
+				.setString("username", user.getUsername());
+		query.executeUpdate();
 	}
 
 	public List<User> getChild(String parentsName) {
@@ -135,5 +142,14 @@ public class UserDao {
 		User u = (User) s.createQuery("from User u where u.username=:username")
 				.setString("username", username).uniqueResult();
 		return u;
+	}
+
+	public void updateLockPwd(String lockPwd, String username) {
+		Session s = sf.getCurrentSession();
+		Query query = s
+				.createQuery(
+						"update User u set u.lockPwd=:lockPwd where u.username=:username")
+				.setString("lockPwd", lockPwd).setString("username", username);
+		query.executeUpdate();
 	}
 }

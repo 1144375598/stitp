@@ -2,8 +2,8 @@ package com.njupt.stitp.server.dto;
 
 public class UseTimeControlDto {
 	private String username;
-	private double start;
-	private double end;
+	private String start;
+	private String end;
 
 	public String getUsername() {
 		return username;
@@ -13,20 +13,22 @@ public class UseTimeControlDto {
 		this.username = username;
 	}
 
-	public double getStart() {
+	public String getStart() {
 		return start;
 	}
 
-	public void setStart(double start) {
+	public void setStart(String start) {
 		this.start = start;
 	}
 
-	public double getEnd() {
+	public String getEnd() {
 		return end;
 	}
 
-	public void setEnd(double end) {
+	public void setEnd(String end) {
 		this.end = end;
 	}
+
+	
 
 }

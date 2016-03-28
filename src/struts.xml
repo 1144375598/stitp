@@ -4,15 +4,26 @@
 
 	<constant name="struts.i18n.encoding" value="UTF-8"></constant>
 	<package name="user" namespace="/user" extends="json-default">
+	    <action name="outOfRange" class="com.njupt.stitp.server.action.UserAction"
+			method="outOfRange">
+			<result type="json"></result>
+		</action>
 		<action name="getUser" class="com.njupt.stitp.server.action.UserAction"
 			method="getInfo">
+			<result type="json"></result>
+		</action>
+		<action name="bumpRemind" class="com.njupt.stitp.server.action.UserAction"
+			method="bumpRemind">
 			<result type="json"></result>
 		</action>
 		<action name="lockScreen" class="com.njupt.stitp.server.action.UserAction"
 			method="lockScreen">
 			<result type="json"></result>
 		</action>
-
+		<action name="unlockScreen" class="com.njupt.stitp.server.action.UserAction"
+			method="unlockScreen">
+			<result type="json"></result>
+		</action>
 		<action name="continueUseTime" class="com.njupt.stitp.server.action.UserAction"
 			method="continueUseTime">
 			<result type="json"></result>
@@ -43,10 +54,6 @@
 			method="addFriendResult">
 			<result type="json"></result>
 		</action>
-		<action name="sendMessage" class="com.njupt.stitp.server.action.UserAction"
-			method="sendMessage">
-			<result type="json"></result>
-		</action>
 		<action name="resetPassword" class="com.njupt.stitp.server.action.UserAction"
 			method="resetPassword">
 			<result type="json"></result>
@@ -72,6 +79,10 @@
 		</action>
 		<action name="useTimeControlInfo" class="com.njupt.stitp.server.action.UploadInfoAction"
 			method="uploadUseTimeControlInfo">
+			<result type="json"></result>
+		</action>
+		<action name="deleteUseTimeControl" class="com.njupt.stitp.server.action.UploadInfoAction"
+			method="deleteUseTimeControl">
 			<result type="json"></result>
 		</action>
 		<action name="geoFencingInfo" class="com.njupt.stitp.server.action.UploadInfoAction"

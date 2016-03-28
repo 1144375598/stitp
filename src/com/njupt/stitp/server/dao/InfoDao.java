@@ -36,8 +36,16 @@ public class InfoDao {
 		}
 	}
 
-	public void saveUseTimeControlInfo(UseTimeControl useTimeControl) {
-		sf.getCurrentSession().save(useTimeControl);
+	public void saveUseTimeControlInfo(List<UseTimeControl> list) {
+		String username=list.get(0).getUser().getUsername();
+		Session session = sf.getCurrentSession();
+		Query query = session.createQuery(
+				"delete from UseTimeControl u where u.username=:username ")
+				.setString("username", username);
+		query.executeUpdate();
+		for(UseTimeControl useTimeControl:list){
+			session.save(useTimeControl);
+		}		
 	}
 
 	public void saveAPPInfo(List<APP> apps) {
@@ -112,7 +120,8 @@ public class InfoDao {
 		} else {
 			geoFencings.get(0).setDistance(geoFencing.getDistance());
 			geoFencings.get(0).setLatitude(geoFencing.getLatitude());
-			geoFencings.get(0).setLongtitude(geoFencing.getLongtitude());
+			geoFencings.get(0).setLongitude(geoFencing.getLongitude());
+			geoFencings.get(0).setAddress(geoFencing.getAddress());
 			session.update(geoFencings.get(0));
 		}
 	}
@@ -128,9 +137,9 @@ public class InfoDao {
 
 	public User getVqInfo(User user) {
 		Session session = sf.getCurrentSession();
-		User u = (User) session.createQuery(
-				"from User u where u.username=:username")
-				.setString("username", user.getUsername()).uniqueResult();		
+		User u = (User) session
+				.createQuery("from User u where u.username=:username")
+				.setString("username", user.getUsername()).uniqueResult();
 		return u;
 	}
 
@@ -163,4 +172,16 @@ public class InfoDao {
 		return u;
 	}
 
+	public void deleteUseTimeControl(UseTimeControl useTimeControl) {
+		Session session = sf.getCurrentSession();
+		Query query = session
+				.createQuery(
+						"delete from UseTimeControl u "
+								+ "where u.username=:username "
+								+ "and u.start=:start and u.end=:end")
+				.setString("username", useTimeControl.getUser().getUsername())
+				.setString("start", useTimeControl.getStart())
+				.setString("end", useTimeControl.getEnd());
+		query.executeUpdate();
+	}
 }

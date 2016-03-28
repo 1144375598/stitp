@@ -10,9 +10,12 @@ import javax.persistence.ManyToOne;
 public class UseTimeControl {
 	private int id;
 	private User user;
-	private double start;
-	private double end;
+	private String start;
+	private String end;
 
+	public UseTimeControl(){
+		user=new User();
+	}
 	@Id
 	@GeneratedValue
 	public int getId() {
@@ -32,19 +35,19 @@ public class UseTimeControl {
 		this.user = user;
 	}
 
-	public double getStart() {
+	public String getStart() {
 		return start;
 	}
 
-	public void setStart(double start) {
+	public void setStart(String start) {
 		this.start = start;
 	}
 
-	public double getEnd() {
+	public String getEnd() {
 		return end;
 	}
 
-	public void setEnd(double end) {
+	public void setEnd(String end) {
 		this.end = end;
 	}
 

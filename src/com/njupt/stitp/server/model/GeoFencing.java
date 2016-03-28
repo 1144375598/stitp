@@ -9,9 +9,26 @@ import javax.persistence.OneToOne;
 public class GeoFencing {
 	private int id;
 	private User user;
-	private double longtitude;
+	private double longitude;
 	private double latitude;
 	private double distance;
+	private String address;
+
+	public double getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
 
 	@Id
 	@GeneratedValue
@@ -30,14 +47,6 @@ public class GeoFencing {
 
 	public void setUser(User user) {
 		this.user = user;
-	}
-
-	public double getLongtitude() {
-		return longtitude;
-	}
-
-	public void setLongtitude(double longtitude) {
-		this.longtitude = longtitude;
 	}
 
 	public double getLatitude() {

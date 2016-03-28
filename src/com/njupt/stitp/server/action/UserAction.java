@@ -1,9 +1,6 @@
 package com.njupt.stitp.server.action;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,9 +25,17 @@ public class UserAction extends ActionSupport {
 	private String friendName;
 	private UserManager userManager = new UserManager();
 	private MD5Code md5Code = new MD5Code();
-	private String message;
 	private String relationship;
 	private Integer resultCode;
+	private Integer serviceCode;
+
+	public Integer getServiceCode() {
+		return serviceCode;
+	}
+
+	public void setServiceCode(Integer serviceCode) {
+		this.serviceCode = serviceCode;
+	}
 
 	public String getRelationship() {
 		return relationship;
@@ -38,14 +43,6 @@ public class UserAction extends ActionSupport {
 
 	public void setRelationship(String relationship) {
 		this.relationship = relationship;
-	}
-
-	public String getMessage() {
-		return message;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
 	}
 
 	public String getFriendName() {
@@ -133,48 +130,41 @@ public class UserAction extends ActionSupport {
 	}
 
 	public void deleteChild() {
-		/*
-		 * result_code: 0 删除成功 1 不可删除家长
-		 */
-		Map<String, Object> resultMap = new HashMap<String, Object>();
-		HttpServletResponse servletResponse = ServletActionContext
-				.getResponse();
-		servletResponse.setContentType("text/html;charset=utf-8");
-		servletResponse.setCharacterEncoding("UTF-8");
-		if (userManager.deleteChild(user, friendName)) {
-			resultMap.put("result_code", 0);
-		} else {
-			resultMap.put("result_code", 1);
-		}
-
-		try {
-			servletResponse.getWriter().write(new Gson().toJson(resultMap));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		userManager.deleteChild(user, friendName);
+		Map<String, String> params = new HashMap<String, String>();
+		params.put("username", friendName);
+		params.put("parentName", user.getUsername());
+		params.put("serviceCode", "13");
+		BaiduPush.pushMsgToSingle(userManager.getCidByUsername(friendName),
+				params, 7 * 24 * 3600);
 	}
 
 	public void uidAndCid() {
+		System.out.println("************************" + user.getUsername()
+				+ "***" + user.getCid());
 		userManager.updateCid(user);
 	}
 
 	public void addFriend() {
 		/*
-		 * result_code 0 验证消息发送成功 1 消息发送失败
+		 * result_code 0 验证消息发送成功 1 无该用户
 		 */
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		HttpServletResponse servletResponse = ServletActionContext
 				.getResponse();
 		servletResponse.setContentType("text/html;charset=utf-8");
 		servletResponse.setCharacterEncoding("UTF-8");
-
-		String mes = "username =" + user.getUsername() + "," + "message ="
-				+ message + "," + "relationship =" + relationship;
-		String result = BaiduPush.PushMsgToSingle(
-				userManager.getCidByUsername(friendName), mes);
-
-		if (result.equals("Success")) {
+		User user2 = new User();
+		user2.setUsername(friendName);
+		if (userManager.exists(user2)) {
 			resultMap.put("result_code", 0);
+			Map<String, String> params = new HashMap<String, String>();
+			params.put("username", friendName);
+			params.put("relationship", relationship);
+			params.put("requestName", user.getUsername());
+			params.put("serviceCode", "11");
+			BaiduPush.pushMsgToSingle(userManager.getCidByUsername(friendName),
+					params, 7 * 24 * 3600);
 		} else {
 			resultMap.put("result_code", 1);
 		}
@@ -187,22 +177,22 @@ public class UserAction extends ActionSupport {
 	}
 
 	public void addFriendResult() {
-		String result = "friendName =" + friendName + "," + "relationship ="
-				+ relationship + "," + "addFriendResult =";
-		if (resultCode == 1)
-			BaiduPush.PushMsgToSingle(
-					userManager.getCidByUsername(user.getUsername()), result
-							+ "1");
-		else if (resultCode == 0) {
+		Map<String, String> params = new HashMap<String, String>();
+		if (resultCode == 0) {
 			if (relationship.equals("child"))
 				userManager.addChild(user.getUsername(), friendName);
 			else if (relationship.equals("parents")) {
 				userManager.addChild(friendName, user.getUsername());
 			}
-			BaiduPush.PushMsgToSingle(
-					userManager.getCidByUsername(user.getUsername()), result
-							+ "0");
 		}
+		params.put("username", user.getUsername());
+		params.put("friendName", friendName);
+		params.put("resultCode", resultCode.toString());
+		params.put("relationship", relationship);
+		params.put("serviceCode", "12");
+		BaiduPush.pushMsgToSingle(
+				userManager.getCidByUsername(user.getUsername()), params,
+				7 * 24 * 3600);
 	}
 
 	public Integer getResultCode() {
@@ -213,51 +203,74 @@ public class UserAction extends ActionSupport {
 		this.resultCode = resultCode;
 	}
 
-	public void sendMessage() {
-		/*
-		 * result_code 0 消息发送成功 1 消息发送失败
-		 */
-		Map<String, Object> resultMap = new HashMap<String, Object>();
-		HttpServletResponse servletResponse = ServletActionContext
-				.getResponse();
-		servletResponse.setContentType("text/html;charset=utf-8");
-		servletResponse.setCharacterEncoding("UTF-8");
-
-		String mes = "username =" + user.getUsername() + "," + "message ="
-				+ message + "," + "date =" + new Date().toString();
-		String result = BaiduPush.PushMsgToSingle(
-				userManager.getCidByUsername(friendName), mes);
-
-		if (result.equals("Success")) {
-			resultMap.put("result_code", 0);
-		} else {
-			resultMap.put("result_code", 1);
-		}
-
-		try {
-			servletResponse.getWriter().write(new Gson().toJson(resultMap));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+	
 
 	public void resetPassword() {
 		user.setPassword(md5Code.getMD5ofStr(user.getPassword()));
 		userManager.updatePassword(user);
 	}
 
+	/*
+	 * 打开定时护眼 7 关闭定时护眼 8 定时护眼时间更改 9
+	 */
 	public void continueUseTime() {
-		userManager.updateContinueTime(user);
-		BaiduPush.PushMsgToSingle(
-				userManager.getCidByUsername(user.getUsername()),
-				"ContinueUseTime updated");
+		Map<String, String> params = new HashMap<String, String>();
+		if (serviceCode == 8) {
+			params.put("username", user.getUsername());
+			params.put("serviceCode", "8");
+			BaiduPush.pushMsgToSingle(
+					userManager.getCidByUsername(user.getUsername()), params,
+					12 * 3600);
+		} else if (serviceCode == 9) {
+			userManager.updateContinueTime(user);
+			params.put("username", user.getUsername());
+			params.put("serviceCode", "9");
+			params.put("continueUseTime",
+					((Integer) (user.getTimeOfContinuousUse())).toString());
+			BaiduPush.pushMsgToSingle(
+					userManager.getCidByUsername(user.getUsername()), params,
+					24 * 3600);
+		} else if (serviceCode == 7) {
+			params.put("username", user.getUsername());
+			params.put("serviceCode", "7");
+			BaiduPush.pushMsgToSingle(
+					userManager.getCidByUsername(user.getUsername()), params,
+					12 * 3600);
+		} else if (serviceCode == 0) {
+			params.put("username", user.getUsername());
+			params.put("serviceCode", "0");
+			params.put("lockPwd", user.getLockPwd());
+			BaiduPush.pushMsgToSingle(
+					userManager.getCidByUsername(user.getUsername()), params,
+					12 * 3600);
+		}
+	}
+
+	public void bumpRemind() {
+		Map<String, String> params = new HashMap<String, String>();
+		params.put("username", user.getUsername());
+		params.put("serviceCode", serviceCode.toString());
+		BaiduPush.pushMsgToSingle(
+				userManager.getCidByUsername(user.getUsername()), params,12*3600);
 	}
 
 	public void lockScreen() {
-		BaiduPush
-				.PushMsgToSingle(
-						userManager.getCidByUsername(user.getUsername()),
-						"lock screen");
+		Map<String, String> params = new HashMap<String, String>();
+		params.put("username", user.getUsername());
+		params.put("serviceCode", "1");
+		params.put("lockPwd", user.getLockPwd());
+
+		BaiduPush.pushMsgToSingle(
+				userManager.getCidByUsername(user.getUsername()), params,5*60);
+		userManager.updateLockPwd(user.getLockPwd(), user.getUsername());
+	}
+
+	public void unlockScreen() {
+		Map<String, String> params = new HashMap<String, String>();
+		params.put("username", user.getUsername());
+		params.put("serviceCode", "2");
+		BaiduPush.pushMsgToSingle(
+				userManager.getCidByUsername(user.getUsername()), params,5*60);
 	}
 
 	public void getChild() {
@@ -300,6 +313,19 @@ public class UserAction extends ActionSupport {
 			servletResponse.getWriter().write(new Gson().toJson(resultMap));
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+	}
+
+	public void outOfRange() {
+		List<User> parents = userManager.getParents(user);
+		for (User parent : parents) {
+			Map<String, String> params = new HashMap<String, String>();
+			params.put("username", parent.getUsername());
+			params.put("serviceCode", "14");
+			params.put("childName", user.getUsername());
+			BaiduPush.pushMsgToSingle(
+					userManager.getCidByUsername(parent.getUsername()), params,
+					3600 * 5);
 		}
 	}
 

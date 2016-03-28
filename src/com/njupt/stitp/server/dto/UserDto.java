@@ -6,7 +6,26 @@ public class UserDto {
 	private int timeOfContinuousListen;
 	private int musicVolume;
 	private String question;
+	private String lockPwd;
 	private String answer;
+	private String QQ;
+
+	public String getQQ() {
+		return QQ;
+	}
+
+	public void setQQ(String qQ) {
+		QQ = qQ;
+	}
+
+	public String getLockPwd() {
+		return lockPwd;
+	}
+
+	public void setLockPwd(String lockPwd) {
+		this.lockPwd = lockPwd;
+	}
+
 	public String getQuestion() {
 		return question;
 	}

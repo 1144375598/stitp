@@ -2,9 +2,35 @@ package com.njupt.stitp.server.dto;
 
 public class GeoFencingDto {
 	private String username;
-	private double longtitude;
+	private double longitude;
 	private double latitude;
 	private double distance;
+	private String address;
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getGeoName() {
+		return geoName;
+	}
+
+	public void setGeoName(String geoName) {
+		this.geoName = geoName;
+	}
+
+	public double getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
+	}
+
+	private String geoName;
 
 	public String getUsername() {
 		return username;
@@ -14,13 +40,7 @@ public class GeoFencingDto {
 		this.username = username;
 	}
 
-	public double getLongtitude() {
-		return longtitude;
-	}
 
-	public void setLongtitude(double longtitude) {
-		this.longtitude = longtitude;
-	}
 
 	public double getLatitude() {
 		return latitude;
