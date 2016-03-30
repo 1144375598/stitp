@@ -86,7 +86,7 @@
 			<result type="json"></result>
 		</action>
 		<action name="geoFencingInfo" class="com.njupt.stitp.server.action.UploadInfoAction"
-			method="uploadGenFencingInfo">
+			method="uploadGeoFencingInfo">
 			<result type="json"></result>
 		</action>
 	</package>

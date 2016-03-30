@@ -203,8 +203,6 @@ public class UserAction extends ActionSupport {
 		this.resultCode = resultCode;
 	}
 
-	
-
 	public void resetPassword() {
 		user.setPassword(md5Code.getMD5ofStr(user.getPassword()));
 		userManager.updatePassword(user);
@@ -251,7 +249,8 @@ public class UserAction extends ActionSupport {
 		params.put("username", user.getUsername());
 		params.put("serviceCode", serviceCode.toString());
 		BaiduPush.pushMsgToSingle(
-				userManager.getCidByUsername(user.getUsername()), params,12*3600);
+				userManager.getCidByUsername(user.getUsername()), params,
+				12 * 3600);
 	}
 
 	public void lockScreen() {
@@ -261,7 +260,8 @@ public class UserAction extends ActionSupport {
 		params.put("lockPwd", user.getLockPwd());
 
 		BaiduPush.pushMsgToSingle(
-				userManager.getCidByUsername(user.getUsername()), params,5*60);
+				userManager.getCidByUsername(user.getUsername()), params,
+				5 * 60);
 		userManager.updateLockPwd(user.getLockPwd(), user.getUsername());
 	}
 
@@ -270,7 +270,8 @@ public class UserAction extends ActionSupport {
 		params.put("username", user.getUsername());
 		params.put("serviceCode", "2");
 		BaiduPush.pushMsgToSingle(
-				userManager.getCidByUsername(user.getUsername()), params,5*60);
+				userManager.getCidByUsername(user.getUsername()), params,
+				5 * 60);
 	}
 
 	public void getChild() {

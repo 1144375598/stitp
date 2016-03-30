@@ -36,16 +36,16 @@ public class InfoDao {
 		}
 	}
 
-	public void saveUseTimeControlInfo(List<UseTimeControl> list) {
-		String username=list.get(0).getUser().getUsername();
+	public void saveUseTimeControlInfo(List<UseTimeControl> list,String name) {
 		Session session = sf.getCurrentSession();
-		Query query = session.createQuery(
-				"delete from UseTimeControl u where u.username=:username ")
-				.setString("username", username);
+		Query query = session
+				.createQuery(
+						"delete from UseTimeControl u where u.user.username=:username ")
+				.setString("username", name);
 		query.executeUpdate();
-		for(UseTimeControl useTimeControl:list){
+		for (UseTimeControl useTimeControl : list) {
 			session.save(useTimeControl);
-		}		
+		}
 	}
 
 	public void saveAPPInfo(List<APP> apps) {

@@ -18,6 +18,7 @@ import sun.misc.BASE64Encoder;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.mysql.jdbc.log.Log;
 import com.njupt.stitp.server.dao.InfoDao;
 import com.njupt.stitp.server.dto.APPDto;
 import com.njupt.stitp.server.dto.ContinueUseTimeDto;
@@ -34,6 +35,16 @@ import com.njupt.stitp.server.util.BaiduPush;
 @Component
 public class InfoManager {
 	private InfoDao infoDao;
+	private UserManager userManager;
+
+	public UserManager getUserManager() {
+		return userManager;
+	}
+
+	@Resource
+	public void setUserManager(UserManager userManager) {
+		this.userManager = userManager;
+	}
 
 	public InfoDao getInfoDao() {
 		return infoDao;
@@ -127,27 +138,29 @@ public class InfoManager {
 		return tracks;
 	}
 
-	public void addUseTimeControlInfo(String info) {
-
-		Gson gson = new Gson();
-		List<UseTimeControlDto> useTimeControlDtos = gson.fromJson(info,
-				new TypeToken<List<UseTimeControlDto>>() {
-				}.getType());
-		String username = useTimeControlDtos.get(0).getUsername();
+	public void addUseTimeControlInfo(String info,String name) {
 		List<UseTimeControl> list = new ArrayList<UseTimeControl>();
-		for (UseTimeControlDto useTimeControlDto : useTimeControlDtos) {
-			UseTimeControl useTimeControl = new UseTimeControl();
-			useTimeControl.setEnd(useTimeControlDto.getEnd());
-			useTimeControl.setStart(useTimeControlDto.getStart());
-			useTimeControl.getUser().setUsername(
-					useTimeControlDto.getUsername());
-			list.add(useTimeControl);
+		if(!(info==null||info.length()==0)){
+			Gson gson = new Gson();
+			List<UseTimeControlDto> useTimeControlDtos = gson.fromJson(info,
+					new TypeToken<List<UseTimeControlDto>>() {
+					}.getType());
+			
+			for (UseTimeControlDto useTimeControlDto : useTimeControlDtos) {
+				UseTimeControl useTimeControl = new UseTimeControl();
+				useTimeControl.setEnd(useTimeControlDto.getEnd());
+				useTimeControl.setStart(useTimeControlDto.getStart());
+				useTimeControl.getUser().setUsername(
+						name);
+				list.add(useTimeControl);
+			}
 		}
-		infoDao.saveUseTimeControlInfo(list);
+		
+		infoDao.saveUseTimeControlInfo(list,name);
 		Map<String, String> params = new HashMap<String, String>();
-		params.put("username", username);
+		params.put("username", name);
 		params.put("serviceCode", "10");
-		BaiduPush.pushMsgToSingle(new UserManager().getCidByUsername(username),
+		BaiduPush.pushMsgToSingle(userManager.getCidByUsername(name),
 				params, 12 * 3600);
 	}
 
@@ -166,16 +179,15 @@ public class InfoManager {
 		return useTimeControls;
 	}
 
-	public void addGenFencingInfo(GeoFencing geoFencing) {
+	public void addGeoFencingInfo(GeoFencing geoFencing) {
 		infoDao.saveGeoFencingInfo(geoFencing);
-		
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("username", geoFencing.getUser().getUsername());
 		params.put("serviceCode", "15");
 		params.put("changeName", geoFencing.getUser().getUsername());
-		BaiduPush.pushMsgToSingle(new UserManager().getCidByUsername(geoFencing
+		BaiduPush.pushMsgToSingle(userManager.getCidByUsername(geoFencing
 				.getUser().getUsername()), params, 12 * 3600);
-		UserManager userManager = new UserManager();
+
 		List<User> parents = userManager.getParents(geoFencing.getUser());
 		for (User parent : parents) {
 			params.clear();

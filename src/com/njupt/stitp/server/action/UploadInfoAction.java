@@ -9,6 +9,15 @@ public class UploadInfoAction {
 	private UseTimeControl useTimeControl;
 	private GeoFencing geoFencing;
 	private String info;
+	private String name;
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	private InfoManager infoManager = new InfoManager();
 	private UserManager userManager = new UserManager();
 
@@ -53,12 +62,12 @@ public class UploadInfoAction {
 	}
 
 	public void uploadUseTimeControlInfo() {
-		infoManager.addUseTimeControlInfo(info);
+		infoManager.addUseTimeControlInfo(info,name);
+		System.out.println("**********************"+info+"*****"+name);
 	}
 
-	public void uploadGenFencingInfo() {
-		infoManager.addGenFencingInfo(geoFencing);
-		System.out.println(geoFencing);
+	public void uploadGeoFencingInfo() {
+		infoManager.addGeoFencingInfo(geoFencing);
 	}
 
 	public GeoFencing getGeoFencing() {

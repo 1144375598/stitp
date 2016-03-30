@@ -125,7 +125,7 @@ public class DownloadInfoAction {
 		}
 	}
 
-	public void downloadTimeControlInfo() {
+	public void downloadUseTimeControlInfo() {
 		/*
 		 * result_code 0 查询成功 1 无使用时间控制信息
 		 */
@@ -173,8 +173,6 @@ public class DownloadInfoAction {
 			e.printStackTrace();
 		}
 	}
-
-
 
 	public void downloadContinueUseInfo() {
 		/*
